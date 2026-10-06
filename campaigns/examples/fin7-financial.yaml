@@ -1,0 +1,89 @@
+engagement:
+  name: Operation Glasshouse
+  type: Adversary Emulation
+  duration_days: 5
+  testing_window: Monday–Friday 09:00–17:00 ET
+  escalation_contact: Engagement Lead
+
+organization:
+  industry: Financial Services
+  critical_assets:
+    - Customer data
+    - Payment systems
+    - Identity infrastructure
+
+environment:
+  identity:
+    - Active Directory
+    - Entra ID
+  endpoints:
+    - Windows 11
+    - Windows Server
+  cloud:
+    - Azure
+  security_controls:
+    - Microsoft Defender for Endpoint
+    - Sentinel
+    - Conditional Access
+
+threat_profile:
+  actor_name: FIN7
+  actor_type: Financially motivated
+  sophistication: High
+  known_behavior:
+    - Credential theft
+    - Remote access
+    - Cloud identity abuse
+    - Data exfiltration
+
+objectives:
+  primary:
+    - Demonstrate whether privileged cloud access can be reached from a compromised workstation
+  secondary:
+    - Evaluate identity segmentation
+    - Measure detection coverage
+    - Validate escalation paths
+    - Assess response workflow
+
+constraints:
+  prohibited:
+    - Production disruption
+    - Destructive actions
+    - Real customer data access
+    - External phishing
+    - Persistence beyond engagement end
+  permitted:
+    - Lab accounts
+    - Synthetic credentials
+    - Controlled lateral movement
+  authorized_systems:
+    - 192.168.50.0/24
+    - lab.contoso.example
+    - Tenant test resources
+  emergency_stop:
+    - Production degradation
+    - Unexpected sensitive-data exposure
+    - Security incident unrelated to engagement
+    - Testing outside authorized scope
+
+assumed_access:
+  initial_privilege: Low-privilege domain account
+  initial_system: Managed corporate workstation
+  identity_context: Hybrid AD + Entra ID
+  assumptions:
+    - Valid low-privilege domain account
+    - Access to one managed endpoint
+    - No administrative privileges
+    - Defender for Endpoint active
+    - Conditional Access enabled
+
+selected_techniques:
+  - T1087
+  - T1069
+  - T1555
+  - T1021
+  - T1078
+  - T1087.004
+  - T1098
+  - T1530
+  - T1041

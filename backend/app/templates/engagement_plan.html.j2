@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ plan.operation_name }} — Engagement Plan</title>
+  <style>
+    :root {
+      --ink: #0a1628;
+      --muted: #4a5568;
+      --accent: #007a8c;
+      --accent-light: #e6f7fa;
+      --border: #cbd5e0;
+      --danger: #c53030;
+      --warn: #b7791f;
+      --ok: #276749;
+      --bg: #ffffff;
+      --panel: #f7fafc;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      font-size: 11pt;
+      line-height: 1.55;
+      color: var(--ink);
+      background: var(--bg);
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 0 48px 64px;
+    }
+
+    @media print {
+      body { padding: 0 36px 36px; max-width: none; }
+      .page-break { page-break-before: always; }
+      .no-print { display: none !important; }
+      a { color: inherit; text-decoration: none; }
+    }
+
+    /* Cover */
+    .cover {
+      padding: 72px 0 48px;
+      border-bottom: 3px solid var(--accent);
+      margin-bottom: 40px;
+    }
+    .cover-meta {
+      font-size: 9pt;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .cover h1 {
+      font-size: 28pt;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+    .cover-sub {
+      font-size: 13pt;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+    .cover-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 32px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 20px 24px;
+    }
+    .cover-field label {
+      display: block;
+      font-size: 8pt;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+    .cover-field span { font-weight: 600; font-size: 10.5pt; }
+
+    /* TOC */
+    .toc { margin-bottom: 40px; }
+    .toc h2 { font-size: 11pt; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 12px; }
+    .toc ol { padding-left: 20px; }
+    .toc li { margin-bottom: 4px; color: var(--muted); }
+    .toc a { color: var(--ink); text-decoration: none; }
+
+    /* Sections */
+    section { margin-bottom: 36px; }
+    h2.section-title {
+      font-size: 13pt;
+      font-weight: 700;
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 6px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    h3 { font-size: 11pt; font-weight: 600; margin: 16px 0 8px; color: var(--ink); }
+    p { margin-bottom: 10px; }
+    ul, ol { margin: 0 0 12px 20px; }
+    li { margin-bottom: 4px; }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+      font-size: 10pt;
+    }
+    thead th {
+      background: var(--accent);
+      color: #fff;
+      text-align: left;
+      padding: 8px 12px;
+      font-size: 9pt;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+    tbody td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tbody tr:nth-child(even) { background: var(--panel); }
+    tbody tr:hover { background: var(--accent-light); }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 8.5pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .badge-high, .badge-prohibited { background: #fed7d7; color: var(--danger); }
+    .badge-medium { background: #fefcbf; color: var(--warn); }
+    .badge-low { background: #c6f6d5; color: var(--ok); }
+    .badge-disabled { background: #e2e8f0; color: var(--muted); }
+    .det-yes { color: var(--ok); font-weight: 600; }
+    .det-no { color: var(--muted); }
+    .det-maybe { color: var(--warn); font-weight: 600; }
+
+    /* Phase cards */
+    .phase-card {
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      background: var(--panel);
+    }
+    .phase-card h3 { margin-top: 0; color: var(--accent); }
+    .phase-grid {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 4px 12px;
+      font-size: 10pt;
+      margin-top: 10px;
+    }
+    .phase-grid dt { color: var(--muted); font-weight: 600; }
+    .phase-grid dd { margin: 0; }
+
+    /* Decision points */
+    .decision {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+    }
+    .decision-id { font-size: 9pt; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+    .decision-q { font-weight: 600; margin: 6px 0 10px; }
+    .decision-path { font-size: 10pt; margin-bottom: 4px; padding-left: 12px; }
+    .path-yes { border-left: 3px solid var(--ok); }
+    .path-no { border-left: 3px solid var(--warn); }
+    .path-stop { border-left: 3px solid var(--danger); }
+
+    /* ROE columns */
+    .roe-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 640px) { .roe-grid, .cover-grid { grid-template-columns: 1fr; } }
+
+    .callout {
+      background: var(--accent-light);
+      border: 1px solid #b2dfdb;
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+    }
+    .callout-danger {
+      background: #fff5f5;
+      border-color: #feb2b2;
+    }
+
+    .footer {
+      margin-top: 48px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 9pt;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .exec-summary {
+      font-size: 11.5pt;
+      line-height: 1.65;
+      color: var(--ink);
+    }
+
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 10pt;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .print-btn:hover { background: #005f6b; }
+  </style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">Print / Save PDF</button>
+
+<header class="cover">
+  <div class="cover-meta">Adversary Emulation — Engagement Plan</div>
+  <h1>{{ plan.operation_name }}</h1>
+  <p class="cover-sub">{{ campaign.engagement.type }}</p>
+  <div class="cover-grid">
+    <div class="cover-field">
+      <label>Threat Actor</label>
+      <span>{{ campaign.threat_profile.actor_name }}</span>
+    </div>
+    <div class="cover-field">
+      <label>Industry</label>
+      <span>{{ campaign.organization.industry }}</span>
+    </div>
+    <div class="cover-field">
+      <label>Duration</label>
+      <span>{{ campaign.engagement.duration_days }} business days</span>
+    </div>
+    <div class="cover-field">
+      <label>Testing Window</label>
+      <span>{{ plan.rules_of_engagement.testing_window }}</span>
+    </div>
+    <div class="cover-field">
+      <label>Overall Risk</label>
+      <span><span class="badge badge-{{ plan.overall_risk.value | lower }}">{{ plan.overall_risk.value }}</span></span>
+    </div>
+    <div class="cover-field">
+      <label>Generated</label>
+      <span>{{ generated_at }}</span>
+    </div>
+    <div class="cover-field">
+      <label>Escalation Contact</label>
+      <span>{{ plan.rules_of_engagement.escalation_contact }}</span>
+    </div>
+    <div class="cover-field">
+      <label>Document ID</label>
+      <span>{% if campaign_id %}GRM-{{ campaign_id }}{% else %}DRAFT{% endif %}</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#executive-summary">Executive Summary</a></li>
+    <li><a href="#mission">Mission &amp; Threat Model</a></li>
+    <li><a href="#objectives">Objectives</a></li>
+    <li><a href="#assumptions">Assumed Access &amp; Initial Conditions</a></li>
+    <li><a href="#techniques">ATT&amp;CK Technique Mapping</a></li>
+    <li><a href="#roe">Rules of Engagement</a></li>
+    <li><a href="#risk">Operational Risk Assessment</a></li>
+    <li><a href="#phases">Campaign Phases</a></li>
+    <li><a href="#decisions">Decision Points</a></li>
+    <li><a href="#detection">Detection Matrix</a></li>
+    <li><a href="#validation">Detection Validation</a></li>
+    <li><a href="#success">Success Conditions &amp; Evidence</a></li>
+  </ol>
+</nav>
+
+<section id="executive-summary">
+  <h2 class="section-title">1. Executive Summary</h2>
+  <div class="exec-summary callout">
+    <p>This document defines a structured <strong>{{ campaign.engagement.type }}</strong> engagement emulating
+    <strong>{{ campaign.threat_profile.actor_name }}</strong> against a
+    <strong>{{ campaign.organization.industry }}</strong> environment over
+    <strong>{{ campaign.engagement.duration_days }} days</strong>.</p>
+    <p>{{ plan.mission }}</p>
+    <p>The exercise authorizes <strong>{{ plan.techniques | length }} ATT&amp;CK techniques</strong> across
+    <strong>{{ plan.phases | length }} campaign phases</strong>, with explicit prohibited actions and emergency
+    stop conditions. Overall engagement risk is assessed as
+    <strong>{{ plan.overall_risk.value }}</strong>.</p>
+    {% if plan.excluded_techniques %}
+    <p><strong>{{ plan.excluded_techniques | length }} technique(s)</strong> were excluded based on environment
+    relevance and engagement constraints.</p>
+    {% endif %}
+  </div>
+</section>
+
+<section id="mission">
+  <h2 class="section-title">2. Mission &amp; Threat Model</h2>
+  <h3>Mission Statement</h3>
+  <p>{{ plan.mission }}</p>
+  <h3>Threat Model</h3>
+  <p>{{ plan.threat_model }}</p>
+  <h3>Threat Profile</h3>
+  <table>
+    <tbody>
+      <tr><td style="width:180px;font-weight:600;color:var(--muted)">Actor</td><td>{{ campaign.threat_profile.actor_name }}</td></tr>
+      <tr><td style="font-weight:600;color:var(--muted)">Type</td><td>{{ campaign.threat_profile.actor_type }}</td></tr>
+      <tr><td style="font-weight:600;color:var(--muted)">Sophistication</td><td>{{ campaign.threat_profile.sophistication }}</td></tr>
+      <tr><td style="font-weight:600;color:var(--muted)">Known Behavior</td><td>{{ campaign.threat_profile.known_behavior | join('; ') }}</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="objectives">
+  <h2 class="section-title">3. Objectives</h2>
+  <h3>Primary Objectives</h3>
+  <ol>
+    {% for obj in plan.primary_objectives %}
+    <li>{{ obj }}</li>
+    {% endfor %}
+  </ol>
+  <h3>Secondary Objectives</h3>
+  <ol>
+    {% for obj in plan.secondary_objectives %}
+    <li>{{ obj }}</li>
+    {% endfor %}
+  </ol>
+</section>
+
+<section id="assumptions">
+  <h2 class="section-title">4. Assumed Access &amp; Initial Conditions</h2>
+  <table>
+    <tbody>
+      <tr><td style="width:180px;font-weight:600;color:var(--muted)">Initial Privilege</td><td>{{ campaign.assumed_access.initial_privilege }}</td></tr>
+      <tr><td style="font-weight:600;color:var(--muted)">Initial System</td><td>{{ campaign.assumed_access.initial_system }}</td></tr>
+      <tr><td style="font-weight:600;color:var(--muted)">Identity Context</td><td>{{ campaign.assumed_access.identity_context }}</td></tr>
+    </tbody>
+  </table>
+  <h3>Initial Assumptions</h3>
+  <ul>
+    {% for assumption in plan.initial_assumptions %}
+    <li>{{ assumption }}</li>
+    {% endfor %}
+  </ul>
+  <h3>Target Environment</h3>
+  <table>
+    <thead><tr><th>Layer</th><th>Components</th></tr></thead>
+    <tbody>
+      <tr><td>Identity</td><td>{{ campaign.environment.identity | join(', ') }}</td></tr>
+      <tr><td>Endpoints</td><td>{{ campaign.environment.endpoints | join(', ') }}</td></tr>
+      <tr><td>Cloud</td><td>{{ campaign.environment.cloud | join(', ') if campaign.environment.cloud else 'None' }}</td></tr>
+      <tr><td>Security Controls</td><td>{{ campaign.environment.security_controls | join(', ') }}</td></tr>
+      <tr><td>Critical Assets</td><td>{{ campaign.organization.critical_assets | join(', ') }}</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="techniques" class="page-break">
+  <h2 class="section-title">5. ATT&amp;CK Technique Mapping</h2>
+  <p>The following techniques are authorized for simulation. Techniques excluded by environment or constraints are listed separately.</p>
+  <table>
+    <thead>
+      <tr><th>Tactic</th><th>Technique</th><th>ID</th></tr>
+    </thead>
+    <tbody>
+      {% for t in plan.techniques %}
+      <tr>
+        <td>{{ t.tactic }}</td>
+        <td>{{ t.name }}</td>
+        <td><strong>{{ t.id }}</strong></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% if plan.excluded_techniques %}
+  <h3>Excluded Techniques</h3>
+  <table>
+    <thead><tr><th>Technique</th><th>ID</th><th>Exclusion Reason</th></tr></thead>
+    <tbody>
+      {% for e in plan.excluded_techniques %}
+      <tr>
+        <td>{{ e.technique_name }}</td>
+        <td>{{ e.technique_id }}</td>
+        <td>{{ e.reason }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</section>
+
+<section id="roe">
+  <h2 class="section-title">6. Rules of Engagement</h2>
+  <div class="roe-grid">
+    <div>
+      <h3>Authorized Systems</h3>
+      <ul>
+        {% for sys in plan.rules_of_engagement.authorized_systems %}
+        <li>{{ sys }}</li>
+        {% endfor %}
+      </ul>
+      <h3>Explicitly Permitted</h3>
+      <ul>
+        {% for item in plan.rules_of_engagement.explicitly_permitted %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div>
+      <h3>Explicitly Prohibited</h3>
+      <ul>
+        {% for item in plan.rules_of_engagement.explicitly_prohibited %}
+        <li style="color:var(--danger)">{{ item }}</li>
+        {% endfor %}
+      </ul>
+      <h3>Emergency Stop Conditions</h3>
+      <div class="callout callout-danger">
+        <ul style="margin:0;padding-left:18px">
+          {% for item in plan.rules_of_engagement.emergency_stop_conditions %}
+          <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p style="margin-top:12px"><strong>Evidence Handling:</strong> {{ plan.rules_of_engagement.evidence_handling }}</p>
+</section>
+
+<section id="risk">
+  <h2 class="section-title">7. Operational Risk Assessment</h2>
+  <table>
+    <thead><tr><th>Category</th><th>Risk Level</th></tr></thead>
+    <tbody>
+      {% for r in plan.risk_assessment %}
+      <tr>
+        <td>{{ r.category }}</td>
+        <td><span class="badge badge-{{ r.level.value | lower }}">{{ r.level.value }}</span></td>
+      </tr>
+      {% endfor %}
+      <tr style="font-weight:700;background:var(--accent-light)">
+        <td>Overall Engagement Risk</td>
+        <td><span class="badge badge-{{ plan.overall_risk.value | lower }}">{{ plan.overall_risk.value }}</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="phases" class="page-break">
+  <h2 class="section-title">8. Campaign Phases</h2>
+  {% for phase in plan.phases %}
+  <div class="phase-card">
+    <h3>Phase {{ phase.order }} — {{ phase.name }}</h3>
+    <dl class="phase-grid">
+      <dt>Operator Intent</dt>
+      <dd>{{ phase.operator_intent }}</dd>
+      <dt>Permitted Simulation</dt>
+      <dd>{{ phase.permitted_simulation }}</dd>
+      <dt>Evidence Required</dt>
+      <dd>{{ phase.evidence_requirement }}</dd>
+      {% if phase.expected_telemetry %}
+      <dt>Expected Telemetry</dt>
+      <dd>{{ phase.expected_telemetry | join(' · ') }}</dd>
+      {% endif %}
+      <dt>Detection Question</dt>
+      <dd><em>{{ phase.detection_question }}</em></dd>
+    </dl>
+  </div>
+  {% endfor %}
+</section>
+
+<section id="decisions">
+  <h2 class="section-title">9. Decision Points</h2>
+  {% for dp in plan.decision_points %}
+  <div class="decision">
+    <div class="decision-id">{{ dp.id }}</div>
+    <div class="decision-q">{{ dp.question }}</div>
+    <div class="decision-path path-yes"><strong>YES →</strong> {{ dp.yes_action }}</div>
+    <div class="decision-path path-no"><strong>NO →</strong> {{ dp.no_action }}</div>
+    <div class="decision-path path-stop"><strong>STOP IF →</strong> {{ dp.stop_condition }}</div>
+  </div>
+  {% endfor %}
+</section>
+
+<section id="detection" class="page-break">
+  <h2 class="section-title">10. Detection Matrix</h2>
+  <p>Expected detection coverage by telemetry source for each authorized technique.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Technique</th>
+        <th>Endpoint</th>
+        <th>Identity</th>
+        <th>Network</th>
+        <th>Cloud</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in plan.detection_matrix %}
+      <tr>
+        <td>{{ row.technique }}</td>
+        <td class="det-{{ row.endpoint | lower }}">{{ row.endpoint }}</td>
+        <td class="det-{{ row.identity | lower }}">{{ row.identity }}</td>
+        <td class="det-{{ row.network | lower }}">{{ row.network }}</td>
+        <td class="det-{{ row.cloud | lower }}">{{ row.cloud }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section id="validation">
+  <h2 class="section-title">11. Detection Validation</h2>
+  {% for dv in plan.detection_validation %}
+  <div class="phase-card">
+    <h3>{{ dv.stage }}</h3>
+    <dl class="phase-grid">
+      <dt>Operator Goal</dt>
+      <dd>{{ dv.operator_goal }}</dd>
+      <dt>Expected Telemetry</dt>
+      <dd>{{ dv.expected_telemetry | join(' · ') }}</dd>
+      <dt>Detection Question</dt>
+      <dd><em>{{ dv.detection_question }}</em></dd>
+      <dt>Evidence Required</dt>
+      <dd>{{ dv.evidence_required }}</dd>
+    </dl>
+  </div>
+  {% endfor %}
+</section>
+
+<section id="success">
+  <h2 class="section-title">12. Success Conditions &amp; Evidence</h2>
+  <h3>Success Conditions</h3>
+  <ul>
+    {% for sc in plan.success_conditions %}
+    <li>{{ sc }}</li>
+    {% endfor %}
+  </ul>
+  <h3>Evidence Requirements</h3>
+  <ul>
+    {% for ev in plan.evidence_requirements %}
+    <li>{{ ev }}</li>
+    {% endfor %}
+  </ul>
+</section>
+
+<footer class="footer">
+  <p><strong>GRIMOIRE</strong> — Guided Red-team Intelligence Mapping, Objectives, Rules &amp; Operational Emulation</p>
+  <p>Planning document only. No attack execution, agent deployment, or unauthorized target interaction.</p>
+  <p>Generated {{ generated_at }}{% if campaign_id %} · Document GRM-{{ campaign_id }}{% endif %}</p>
+</footer>
+
+</body>
+</html>

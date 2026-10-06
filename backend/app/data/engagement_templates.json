@@ -1,0 +1,219 @@
+[
+  {
+    "id": "adversary-emulation",
+    "name": "Adversary Emulation",
+    "icon": "◈",
+    "description": "Full-scope emulation of a known threat actor's TTPs against your environment.",
+    "duration_days": 5,
+    "primary_objectives": [
+      "Demonstrate whether the emulated adversary's attack path is viable in the target environment",
+      "Validate detection and response against historically observed TTPs"
+    ],
+    "secondary_objectives": [
+      "Measure time-to-detection across campaign phases",
+      "Identify architectural control gaps",
+      "Produce ATT&CK-mapped evidence package"
+    ],
+    "default_constraints_prohibited": [
+      "Production disruption",
+      "Destructive actions",
+      "External phishing",
+      "Persistence beyond engagement end"
+    ],
+    "default_constraints_permitted": [
+      "Lab accounts",
+      "Synthetic credentials",
+      "Controlled lateral movement"
+    ],
+    "suggested_actors": ["fin7", "apt29", "apt28", "scattered-spider", "volt-typhoon"]
+  },
+  {
+    "id": "purple-team",
+    "name": "Purple Team Exercise",
+    "icon": "◉",
+    "description": "Collaborative red/blue validation focused on detection coverage and SOC workflow.",
+    "duration_days": 3,
+    "primary_objectives": [
+      "Validate detection rules and alert fidelity for planned techniques",
+      "Measure SOC triage and escalation workflow under simulated adversary activity"
+    ],
+    "secondary_objectives": [
+      "Score detection coverage per ATT&CK technique",
+      "Document alert tuning recommendations",
+      "Validate playbooks against emulated TTPs"
+    ],
+    "default_constraints_prohibited": [
+      "Unannounced activity outside purple team window",
+      "Production disruption",
+      "Destructive actions"
+    ],
+    "default_constraints_permitted": [
+      "Real-time SOC collaboration",
+      "Controlled technique execution in lab",
+      "Synthetic accounts"
+    ],
+    "suggested_actors": ["apt29", "fin7", "generic-ransomware", "apt41"]
+  },
+  {
+    "id": "ransomware-readiness",
+    "name": "Ransomware Readiness",
+    "icon": "☠",
+    "description": "Assess blast radius, lateral movement paths, and backup/recovery resilience without deploying ransomware.",
+    "duration_days": 4,
+    "primary_objectives": [
+      "Map viable paths from initial access to domain-wide impact",
+      "Validate backup integrity and recovery procedures under simulated pressure"
+    ],
+    "secondary_objectives": [
+      "Test segmentation controls between business units",
+      "Evaluate EDR containment effectiveness",
+      "Document crown-jewel exposure"
+    ],
+    "default_constraints_prohibited": [
+      "Actual encryption or destructive impact",
+      "Production disruption",
+      "Real data destruction"
+    ],
+    "default_constraints_permitted": [
+      "Simulated impact markers",
+      "Controlled lateral movement",
+      "Lab domain controllers"
+    ],
+    "suggested_actors": ["lockbit", "blackcat", "generic-ransomware", "fin8"]
+  },
+  {
+    "id": "cloud-identity",
+    "name": "Cloud Identity Assessment",
+    "icon": "☁",
+    "description": "Hybrid identity abuse — from workstation compromise to privileged cloud access.",
+    "duration_days": 5,
+    "primary_objectives": [
+      "Demonstrate whether workstation compromise leads to privileged cloud access",
+      "Validate Conditional Access, PIM, and cloud audit logging"
+    ],
+    "secondary_objectives": [
+      "Evaluate federation trust boundaries",
+      "Test token/credential abuse detection",
+      "Assess cross-cloud lateral movement controls"
+    ],
+    "default_constraints_prohibited": [
+      "Production tenant modification",
+      "Real customer data access",
+      "External phishing"
+    ],
+    "default_constraints_permitted": [
+      "Lab tenant resources",
+      "Synthetic service principals",
+      "Token replay in controlled scope"
+    ],
+    "suggested_actors": ["apt29", "apt41", "scattered-spider", "fin7", "menuPass"]
+  },
+  {
+    "id": "insider-threat",
+    "name": "Insider Threat Simulation",
+    "icon": "◎",
+    "description": "Authorized insider abuse of legitimate access — no external initial access required.",
+    "duration_days": 3,
+    "primary_objectives": [
+      "Evaluate whether a trusted insider can reach sensitive data without triggering alerts",
+      "Validate DLP, UEBA, and access review controls"
+    ],
+    "secondary_objectives": [
+      "Test privileged access monitoring",
+      "Assess data exfiltration detection",
+      "Validate offboarding control effectiveness"
+    ],
+    "default_constraints_prohibited": [
+      "Actual data exfiltration to external systems",
+      "Production disruption",
+      "Harassment of personnel"
+    ],
+    "default_constraints_permitted": [
+      "Designated insider persona accounts",
+      "Simulated exfiltration to controlled sink",
+      "Synthetic sensitive data"
+    ],
+    "suggested_actors": ["custom", "fin7", "apt41"]
+  },
+  {
+    "id": "supply-chain",
+    "name": "Supply Chain Trust Validation",
+    "icon": "⛓",
+    "description": "Assess trust boundaries with vendors, CI/CD pipelines, and third-party integrations.",
+    "duration_days": 7,
+    "primary_objectives": [
+      "Validate whether compromised vendor access can reach internal critical assets",
+      "Test CI/CD pipeline integrity controls"
+    ],
+    "secondary_objectives": [
+      "Evaluate third-party network segmentation",
+      "Assess software signing and artifact verification",
+      "Document trust dependency map"
+    ],
+    "default_constraints_prohibited": [
+      "Actual supply chain modification",
+      "Vendor notification without coordination",
+      "Production disruption"
+    ],
+    "default_constraints_permitted": [
+      "Simulated vendor credentials",
+      "Lab CI/CD pipeline testing",
+      "Controlled trust boundary crossing"
+    ],
+    "suggested_actors": ["apt29", "apt41", "lazarus", "sandworm"]
+  },
+  {
+    "id": "data-exfiltration",
+    "name": "Data Exfiltration Path Assessment",
+    "icon": "↗",
+    "description": "Map and test data collection and exfiltration paths without moving real sensitive data.",
+    "duration_days": 4,
+    "primary_objectives": [
+      "Identify viable data staging and exfiltration channels from a compromised position",
+      "Validate DLP, proxy, and network monitoring effectiveness"
+    ],
+    "secondary_objectives": [
+      "Test encrypted channel detection",
+      "Evaluate cloud storage abuse monitoring",
+      "Document data classification gaps"
+    ],
+    "default_constraints_prohibited": [
+      "Real sensitive data leaving the environment",
+      "Production disruption",
+      "External C2 infrastructure"
+    ],
+    "default_constraints_permitted": [
+      "Synthetic canary data",
+      "Controlled exfiltration to engagement sink",
+      "Lab network segments"
+    ],
+    "suggested_actors": ["fin7", "apt29", "lazarus", "apt28"]
+  },
+  {
+    "id": "assumed-breach",
+    "name": "Assumed Breach Exercise",
+    "icon": "⬡",
+    "description": "Start from an assumed compromised workstation — skip initial access, focus on post-exploitation.",
+    "duration_days": 3,
+    "primary_objectives": [
+      "Evaluate post-compromise detection and containment from assumed foothold",
+      "Map privilege escalation and lateral movement paths"
+    ],
+    "secondary_objectives": [
+      "Validate EDR response playbooks",
+      "Test network segmentation under active adversary simulation",
+      "Measure dwell time before containment"
+    ],
+    "default_constraints_prohibited": [
+      "Initial access testing",
+      "Production disruption",
+      "Destructive actions"
+    ],
+    "default_constraints_permitted": [
+      "Pre-staged foothold accounts",
+      "Controlled escalation",
+      "Synthetic objectives"
+    ],
+    "suggested_actors": ["apt29", "apt28", "fin7", "scattered-spider", "volt-typhoon"]
+  }
+]

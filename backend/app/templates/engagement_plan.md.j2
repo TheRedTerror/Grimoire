@@ -1,0 +1,235 @@
+---
+title: "{{ plan.operation_name }}"
+engagement_type: "{{ campaign.engagement.type }}"
+threat_actor: "{{ campaign.threat_profile.actor_name }}"
+industry: "{{ campaign.organization.industry }}"
+duration_days: {{ campaign.engagement.duration_days }}
+generated: "{{ generated_at }}"
+document_id: "{% if campaign_id %}GRM-{{ campaign_id }}{% else %}DRAFT{% endif %}"
+---
+
+# {{ plan.operation_name }}
+
+| Field | Value |
+|-------|-------|
+| **Engagement Type** | {{ campaign.engagement.type }} |
+| **Threat Actor** | {{ campaign.threat_profile.actor_name }} ({{ campaign.threat_profile.actor_type }}) |
+| **Industry** | {{ campaign.organization.industry }} |
+| **Duration** | {{ campaign.engagement.duration_days }} days |
+| **Testing Window** | {{ plan.rules_of_engagement.testing_window }} |
+| **Overall Risk** | {{ plan.overall_risk.value }} |
+| **Document ID** | {% if campaign_id %}GRM-{{ campaign_id }}{% else %}DRAFT{% endif %} |
+| **Generated** | {{ generated_at }} |
+
+---
+
+## 1. Executive Summary
+
+This document defines a structured **{{ campaign.engagement.type }}** engagement emulating **{{ campaign.threat_profile.actor_name }}** against a **{{ campaign.organization.industry }}** environment.
+
+{{ plan.mission }}
+
+The exercise authorizes **{{ plan.techniques | length }} ATT&CK techniques** across **{{ plan.phases | length }} campaign phases**. Overall engagement risk: **{{ plan.overall_risk.value }}**.
+
+---
+
+## 2. Mission & Threat Model
+
+### Mission
+
+{{ plan.mission }}
+
+### Threat Model
+
+{{ plan.threat_model }}
+
+| Attribute | Value |
+|-----------|-------|
+| Actor | {{ campaign.threat_profile.actor_name }} |
+| Type | {{ campaign.threat_profile.actor_type }} |
+| Sophistication | {{ campaign.threat_profile.sophistication }} |
+
+---
+
+## 3. Objectives
+
+### Primary
+
+{% for obj in plan.primary_objectives %}
+1. {{ obj }}
+{% endfor %}
+
+### Secondary
+
+{% for obj in plan.secondary_objectives %}
+1. {{ obj }}
+{% endfor %}
+
+---
+
+## 4. Assumed Access
+
+| Condition | Value |
+|-----------|-------|
+| Initial Privilege | {{ campaign.assumed_access.initial_privilege }} |
+| Initial System | {{ campaign.assumed_access.initial_system }} |
+| Identity Context | {{ campaign.assumed_access.identity_context }} |
+
+### Assumptions
+
+{% for assumption in plan.initial_assumptions %}
+- {{ assumption }}
+{% endfor %}
+
+### Environment
+
+| Layer | Components |
+|-------|------------|
+| Identity | {{ campaign.environment.identity | join(', ') }} |
+| Endpoints | {{ campaign.environment.endpoints | join(', ') }} |
+| Cloud | {{ campaign.environment.cloud | join(', ') if campaign.environment.cloud else 'None' }} |
+| Controls | {{ campaign.environment.security_controls | join(', ') }} |
+
+---
+
+## 5. ATT&CK Technique Mapping
+
+| # | Tactic | Technique | ID |
+|---|--------|-----------|-----|
+{% for t in plan.techniques %}
+| {{ loop.index }} | {{ t.tactic }} | {{ t.name }} | {{ t.id }} |
+{% endfor %}
+
+{% if plan.excluded_techniques %}
+### Excluded Techniques
+
+| Technique | ID | Reason |
+|-----------|-----|--------|
+{% for e in plan.excluded_techniques %}
+| {{ e.technique_name }} | {{ e.technique_id }} | {{ e.reason }} |
+{% endfor %}
+{% endif %}
+
+---
+
+## 6. Rules of Engagement
+
+**Testing Window:** {{ plan.rules_of_engagement.testing_window }}  
+**Escalation Contact:** {{ plan.rules_of_engagement.escalation_contact }}  
+**Evidence Handling:** {{ plan.rules_of_engagement.evidence_handling }}
+
+### Authorized Systems
+
+{% for sys in plan.rules_of_engagement.authorized_systems %}
+- {{ sys }}
+{% endfor %}
+
+### Explicitly Prohibited
+
+{% for item in plan.rules_of_engagement.explicitly_prohibited %}
+- ⛔ {{ item }}
+{% endfor %}
+
+### Explicitly Permitted
+
+{% for item in plan.rules_of_engagement.explicitly_permitted %}
+- ✓ {{ item }}
+{% endfor %}
+
+### Emergency Stop Conditions
+
+{% for item in plan.rules_of_engagement.emergency_stop_conditions %}
+- 🛑 {{ item }}
+{% endfor %}
+
+---
+
+## 7. Operational Risk
+
+| Category | Level |
+|----------|-------|
+{% for r in plan.risk_assessment %}
+| {{ r.category }} | **{{ r.level.value }}** |
+{% endfor %}
+| **Overall** | **{{ plan.overall_risk.value }}** |
+
+---
+
+## 8. Campaign Phases
+
+{% for phase in plan.phases %}
+### Phase {{ phase.order }} — {{ phase.name }}
+
+| | |
+|---|---|
+| **Operator Intent** | {{ phase.operator_intent }} |
+| **Permitted Simulation** | {{ phase.permitted_simulation }} |
+| **Evidence Required** | {{ phase.evidence_requirement }} |
+| **Detection Question** | _{{ phase.detection_question }}_ |
+
+{% if phase.expected_telemetry %}
+**Expected Telemetry:** {{ phase.expected_telemetry | join(' · ') }}
+{% endif %}
+
+---
+{% endfor %}
+
+## 9. Decision Points
+
+{% for dp in plan.decision_points %}
+### {{ dp.id }}
+
+**{{ dp.question }}**
+
+| Path | Action |
+|------|--------|
+| YES | {{ dp.yes_action }} |
+| NO | {{ dp.no_action }} |
+| STOP IF | {{ dp.stop_condition }} |
+
+{% endfor %}
+
+---
+
+## 10. Detection Matrix
+
+| Technique | Endpoint | Identity | Network | Cloud |
+|-----------|:--------:|:--------:|:-------:|:-----:|
+{% for row in plan.detection_matrix %}
+| {{ row.technique }} | {{ row.endpoint }} | {{ row.identity }} | {{ row.network }} | {{ row.cloud }} |
+{% endfor %}
+
+---
+
+## 11. Detection Validation
+
+{% for dv in plan.detection_validation %}
+### {{ dv.stage }}
+
+- **Goal:** {{ dv.operator_goal }}
+- **Telemetry:** {{ dv.expected_telemetry | join(' · ') }}
+- **Question:** _{{ dv.detection_question }}_
+- **Evidence:** {{ dv.evidence_required }}
+
+{% endfor %}
+
+---
+
+## 12. Success Conditions & Evidence
+
+### Success Conditions
+
+{% for sc in plan.success_conditions %}
+- {{ sc }}
+{% endfor %}
+
+### Evidence Requirements
+
+{% for ev in plan.evidence_requirements %}
+- {{ ev }}
+{% endfor %}
+
+---
+
+_Generated by **GRIMOIRE** — Guided Red-team Intelligence Mapping, Objectives, Rules & Operational Emulation_  
+_Planning document only. No attack execution or unauthorized target interaction._

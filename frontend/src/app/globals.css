@@ -1,0 +1,323 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "@xyflow/react/dist/style.css";
+
+:root {
+  --grimoire-bg: #010101;
+  --grimoire-panel: #0a0a0c;
+  --grimoire-panel-elevated: #111114;
+  --grimoire-accent: #8b0018;
+  --grimoire-accent-dim: #4a5568;
+  --grimoire-accent-glow: #b3001f;
+  --grimoire-danger: #cc0022;
+  --grimoire-muted: #4a4048;
+  --grimoire-border: #1a1a20;
+  --grimoire-text: #7a828a;
+  --grimoire-text-bright: #b8bcc4;
+  --grimoire-warm: #6a5a48;
+}
+
+* { box-sizing: border-box; }
+
+html { color-scheme: dark; }
+
+body {
+  background: var(--grimoire-bg);
+  color: var(--grimoire-text);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  min-height: 100vh;
+  font-size: 13px;
+}
+
+.app-shell { position: relative; min-height: 100vh; }
+
+.app-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% -5%, rgba(139, 0, 24, 0.07), transparent),
+    radial-gradient(ellipse 50% 35% at 0% 100%, rgba(20, 20, 30, 0.8), transparent),
+    radial-gradient(ellipse 40% 30% at 100% 50%, rgba(139, 0, 24, 0.04), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app-shell::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.grid-overlay {
+  background-image:
+    linear-gradient(rgba(26, 20, 20, 0.25) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26, 20, 20, 0.25) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.scanline-overlay {
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0, 0, 0, 0.06) 2px, rgba(0, 0, 0, 0.06) 4px
+  );
+  pointer-events: none;
+}
+
+.font-display {
+  font-family: "Share Tech Mono", "IBM Plex Mono", monospace;
+  letter-spacing: 0.1em;
+}
+
+.grimoire-input {
+  @apply w-full bg-grimoire-bg border border-grimoire-border px-3 py-2 text-sm;
+  color: var(--grimoire-text-bright);
+  @apply focus:outline-none focus:border-grimoire-accent focus:ring-1 focus:ring-grimoire-accent/20;
+  @apply transition-colors placeholder:text-grimoire-muted/50;
+  border-radius: 0;
+}
+
+.grimoire-label {
+  @apply block text-[10px] uppercase tracking-[0.2em] mb-1.5;
+  color: var(--grimoire-muted);
+}
+
+.grimoire-btn {
+  @apply px-4 py-2 text-xs font-medium transition-all uppercase tracking-wider;
+  border-radius: 0;
+}
+
+.grimoire-btn-primary {
+  @apply grimoire-btn text-white;
+  background: var(--grimoire-accent);
+  @apply hover:brightness-125 active:scale-[0.98];
+  box-shadow: 0 0 20px rgba(139, 0, 24, 0.2);
+}
+
+.grimoire-btn-secondary {
+  @apply grimoire-btn border border-grimoire-border bg-grimoire-bg/60;
+  color: var(--grimoire-text-bright);
+  @apply hover:border-grimoire-accent/60 hover:text-white;
+}
+
+.grimoire-btn-ghost {
+  @apply grimoire-btn border border-transparent;
+  color: var(--grimoire-muted);
+  @apply hover:text-grimoire-text-bright hover:border-grimoire-border;
+}
+
+.grimoire-panel {
+  @apply border border-grimoire-border backdrop-blur-sm;
+  background: rgba(10, 10, 12, 0.92);
+  border-radius: 0;
+}
+
+.dossier-card {
+  background: linear-gradient(160deg, rgba(10, 10, 12, 0.98) 0%, rgba(1, 1, 1, 0.95) 100%);
+  border: 1px solid var(--grimoire-border);
+  border-left: 2px solid var(--grimoire-accent);
+  border-radius: 0;
+}
+
+.classification-banner {
+  @apply text-center py-0.5 text-[9px] tracking-[0.25em] uppercase;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(139, 0, 24, 0.12) 0px, rgba(139, 0, 24, 0.12) 2px,
+    rgba(1, 1, 1, 0.6) 2px, rgba(1, 1, 1, 0.6) 4px
+  );
+  color: rgba(204, 0, 34, 0.75);
+  border-bottom: 1px solid rgba(139, 0, 24, 0.2);
+}
+
+.signal-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--grimoire-accent);
+  box-shadow: 0 0 8px var(--grimoire-accent);
+  animation: pulse-signal 3s ease-in-out infinite;
+}
+
+@keyframes pulse-signal {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 0.25; }
+}
+
+.nav-item {
+  @apply w-full text-left px-3 py-2 text-xs flex items-center gap-2.5 transition-all border border-transparent;
+  border-radius: 0;
+}
+
+.nav-item-active {
+  color: var(--grimoire-text-bright);
+  background: rgba(139, 0, 24, 0.08);
+  border-color: rgba(139, 0, 24, 0.35);
+  box-shadow: inset 3px 0 0 var(--grimoire-accent);
+}
+
+.nav-item-inactive {
+  @apply hover:bg-grimoire-bg/50;
+  color: var(--grimoire-text);
+}
+
+.nav-item-inactive:hover { color: var(--grimoire-text-bright); }
+
+.nav-item-complete { color: var(--grimoire-muted); }
+
+.tactical-card {
+  @apply relative p-4 border border-grimoire-border;
+  background: rgba(8, 8, 10, 0.8);
+  @apply transition-all duration-200 cursor-pointer;
+  border-radius: 0;
+}
+
+.tactical-card:hover {
+  border-color: rgba(139, 0, 24, 0.4);
+  background: rgba(12, 8, 10, 0.9);
+}
+
+.tactical-card-selected {
+  border-color: var(--grimoire-accent);
+  background: rgba(139, 0, 24, 0.06);
+  box-shadow: 0 0 24px rgba(139, 0, 24, 0.1);
+}
+
+.wizard-step-active {
+  @apply font-semibold text-white;
+  background: var(--grimoire-accent);
+}
+
+.wizard-step-done {
+  color: var(--grimoire-text-bright);
+  border: 1px solid rgba(139, 0, 24, 0.3);
+  background: rgba(139, 0, 24, 0.05);
+}
+
+.wizard-step-pending {
+  @apply border border-grimoire-border/50;
+  color: var(--grimoire-muted);
+  background: rgba(1, 1, 1, 0.5);
+}
+
+.wizard-step {
+  @apply flex items-center gap-2 px-3 py-1.5 text-[10px] uppercase tracking-widest transition-all;
+  border-radius: 0;
+}
+
+/* Facility map */
+.facility-map-bg {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(20, 10, 10, 0.4) 0%, transparent 70%),
+    #010101;
+}
+
+.facility-zone-node {
+  background: linear-gradient(180deg, #0e0c0c 0%, #080808 100%);
+  border: 1px solid #3a2020;
+  min-width: 140px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+.facility-zone-type {
+  padding: 3px 8px;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.facility-zone-label {
+  padding: 8px 10px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--grimoire-text-bright);
+}
+
+.facility-zone-controls {
+  padding: 0 10px 8px;
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.facility-zone-controls span {
+  font-size: 8px;
+  padding: 1px 4px;
+  border: 1px solid var(--grimoire-border);
+  color: var(--grimoire-muted);
+}
+
+/* Risk badges */
+.risk-critical { color: #cc0022; font-weight: 600; }
+.risk-high { color: #aa3030; }
+.risk-medium { color: #8a7040; }
+.risk-low { color: #4a6050; }
+
+.text-grimoire-accent { color: var(--grimoire-accent-glow) !important; }
+.text-grimoire-accent-dim { color: var(--grimoire-accent-dim) !important; }
+.text-grimoire-text-bright { color: var(--grimoire-text-bright); }
+.text-grimoire-muted { color: var(--grimoire-muted); }
+.text-grimoire-danger { color: var(--grimoire-danger); }
+.bg-grimoire-bg { background: var(--grimoire-bg); }
+.bg-grimoire-panel { background: var(--grimoire-panel); }
+.border-grimoire-border { border-color: var(--grimoire-border); }
+.border-grimoire-accent { border-color: var(--grimoire-accent); }
+.border-grimoire-danger { border-color: var(--grimoire-danger); }
+
+/* React Flow — campaign */
+.react-flow__node-phase {
+  background: linear-gradient(180deg, #0e0a0a 0%, #080808 100%);
+  border: 1px solid rgba(139, 0, 24, 0.5);
+  border-radius: 0;
+  padding: 0;
+  min-width: 168px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.react-flow__node-phase.selected {
+  border-color: var(--grimoire-danger);
+  box-shadow: 0 0 20px rgba(204, 0, 34, 0.2);
+}
+
+.phase-node-header {
+  background: rgba(139, 0, 24, 0.1);
+  border-bottom: 1px solid rgba(139, 0, 24, 0.2);
+  padding: 4px 10px;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--grimoire-muted);
+}
+
+.phase-node-body {
+  padding: 10px 12px;
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--grimoire-text-bright);
+}
+
+.react-flow__edge-text { fill: var(--grimoire-muted); font-size: 9px; }
+
+.react-flow__controls-button {
+  background: #0a0a0c !important;
+  border-color: #1a1a20 !important;
+  fill: #7a828a !important;
+}
+
+.stamp {
+  @apply inline-block px-2 py-0.5 text-[9px] uppercase tracking-widest font-semibold;
+  border: 1px solid currentColor;
+  transform: rotate(-1deg);
+  opacity: 0.8;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: #010101; }
+::-webkit-scrollbar-thumb { background: #2a2020; }
+::-webkit-scrollbar-thumb:hover { background: #4a3030; }

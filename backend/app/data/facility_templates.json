@@ -1,0 +1,48 @@
+[
+  {
+    "id": "corporate-office",
+    "name": "Corporate Office",
+    "description": "Multi-floor HQ with lobby, operations, and executive areas.",
+    "zones": [
+      {"label": "Parking Approach", "zone_type": "parking", "position": {"x": 80, "y": 320}, "controls": ["cctv"]},
+      {"label": "Main Entry", "zone_type": "entry", "position": {"x": 200, "y": 280}, "controls": ["rfid", "cctv", "guard"]},
+      {"label": "Lobby", "zone_type": "public", "position": {"x": 320, "y": 240}, "controls": ["cctv", "wifi"]},
+      {"label": "Operations Floor", "zone_type": "restricted", "position": {"x": 480, "y": 200}, "controls": ["rfid", "cctv"]},
+      {"label": "Server / IDF", "zone_type": "network", "position": {"x": 600, "y": 160}, "controls": ["lock", "alarm", "cctv"]},
+      {"label": "Executive Suite", "zone_type": "executive", "position": {"x": 720, "y": 120}, "controls": ["biometric", "guard"]}
+    ],
+    "paths": [
+      {"source": "zone-0", "target": "zone-1", "label": "Approach"},
+      {"source": "zone-1", "target": "zone-2", "label": "Entry"},
+      {"source": "zone-2", "target": "zone-3", "label": "Badge access"},
+      {"source": "zone-3", "target": "zone-4", "label": "Escalation path"},
+      {"source": "zone-4", "target": "zone-5", "label": "Objective"}
+    ]
+  },
+  {
+    "id": "retail-branch",
+    "name": "Retail / Financial Branch",
+    "description": "Customer-facing branch with vault and back-office.",
+    "zones": [
+      {"label": "Street Approach", "zone_type": "perimeter", "position": {"x": 100, "y": 300}, "controls": ["cctv"]},
+      {"label": "Customer Entry", "zone_type": "entry", "position": {"x": 240, "y": 260}, "controls": ["lock", "alarm"]},
+      {"label": "Teller Floor", "zone_type": "public", "position": {"x": 380, "y": 220}, "controls": ["cctv", "alarm"]},
+      {"label": "Vault Antechamber", "zone_type": "restricted", "position": {"x": 520, "y": 180}, "controls": ["rfid", "cctv", "lock"]},
+      {"label": "Vault", "zone_type": "secure", "position": {"x": 660, "y": 140}, "controls": ["biometric", "mantrap", "alarm"]}
+    ],
+    "paths": []
+  },
+  {
+    "id": "datacenter-cage",
+    "name": "Colocation / Datacenter",
+    "description": "Shared facility with cage, meet-me room, and loading dock.",
+    "zones": [
+      {"label": "Loading Dock", "zone_type": "utility", "position": {"x": 80, "y": 280}, "controls": ["cctv", "guard"]},
+      {"label": "Security Desk", "zone_type": "entry", "position": {"x": 220, "y": 240}, "controls": ["guard", "rfid", "cctv"]},
+      {"label": "Meet-Me Room", "zone_type": "restricted", "position": {"x": 360, "y": 200}, "controls": ["lock", "cctv"]},
+      {"label": "Customer Cage", "zone_type": "secure", "position": {"x": 500, "y": 160}, "controls": ["biometric", "mantrap", "alarm"]},
+      {"label": "RF Lab Adjacent", "zone_type": "rf_enclosure", "position": {"x": 640, "y": 120}, "controls": ["wifi", "ble", "lock"]}
+    ],
+    "paths": []
+  }
+]

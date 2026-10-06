@@ -1,0 +1,72 @@
+[
+  {
+    "id": "perimeter",
+    "label": "Perimeter",
+    "description": "External boundary — fence line, parking approach, loading dock exterior.",
+    "default_controls": ["cctv", "guard"],
+    "color": "#4a3030"
+  },
+  {
+    "id": "entry",
+    "label": "Entry Point",
+    "description": "Doors, turnstiles, visitor reception — primary access control boundary.",
+    "default_controls": ["lock", "rfid", "cctv"],
+    "color": "#5a2020"
+  },
+  {
+    "id": "public",
+    "label": "Public Area",
+    "description": "Lobby, cafeteria, conference — low restriction internal space.",
+    "default_controls": ["cctv", "wifi"],
+    "color": "#2a2a30"
+  },
+  {
+    "id": "restricted",
+    "label": "Restricted",
+    "description": "Badge-required areas — operations floor, back office.",
+    "default_controls": ["rfid", "cctv", "lock"],
+    "color": "#3a2030"
+  },
+  {
+    "id": "secure",
+    "label": "Secure Vault",
+    "description": "High-value target — vault, archive, sensitive records.",
+    "default_controls": ["biometric", "mantrap", "alarm", "cctv"],
+    "color": "#501018"
+  },
+  {
+    "id": "rf_enclosure",
+    "label": "RF Enclosure",
+    "description": "Wireless trust boundary — Faraday space, SCIF-adjacent, lab.",
+    "default_controls": ["wifi", "ble", "nfc", "lock"],
+    "color": "#203040"
+  },
+  {
+    "id": "network",
+    "label": "Network Closet",
+    "description": "IDF/MDF, patch panels, wireless controllers.",
+    "default_controls": ["lock", "cctv", "alarm"],
+    "color": "#1a2838"
+  },
+  {
+    "id": "executive",
+    "label": "Executive Suite",
+    "description": "C-suite, boardroom — high-value identity and document targets.",
+    "default_controls": ["biometric", "guard", "cctv"],
+    "color": "#402028"
+  },
+  {
+    "id": "parking",
+    "label": "Parking / Approach",
+    "description": "Vehicle approach, garage, exterior staging.",
+    "default_controls": ["cctv", "guard"],
+    "color": "#252520"
+  },
+  {
+    "id": "utility",
+    "label": "Utility / Mechanical",
+    "description": "Mechanical rooms, roof access, service corridors.",
+    "default_controls": ["lock", "alarm"],
+    "color": "#1a1a1e"
+  }
+]

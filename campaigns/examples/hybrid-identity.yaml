@@ -1,0 +1,77 @@
+engagement:
+  name: Operation Crosswind
+  type: Adversary Emulation
+  duration_days: 7
+  testing_window: Monday–Friday 08:00–18:00 ET
+  escalation_contact: Purple Team Lead
+
+organization:
+  industry: Technology
+  critical_assets:
+    - Source code repositories
+    - CI/CD pipelines
+    - Cloud identity infrastructure
+
+environment:
+  identity:
+    - Active Directory
+    - Entra ID
+    - Okta
+  endpoints:
+    - Windows 11
+    - macOS
+  cloud:
+    - Azure
+    - AWS
+  security_controls:
+    - CrowdStrike Falcon
+    - Splunk SIEM
+    - Conditional Access
+    - PIM
+
+threat_profile:
+  actor_name: APT29
+  actor_type: Nation-state
+  sophistication: Very High
+  known_behavior:
+    - Cloud identity abuse
+    - Token theft
+    - Stealthy lateral movement
+
+objectives:
+  primary:
+    - Validate detection of cloud token abuse from hybrid identity compromise
+  secondary:
+    - Test PIM activation monitoring
+    - Assess cross-cloud lateral movement controls
+
+constraints:
+  prohibited:
+    - Production disruption
+    - External phishing
+    - Destructive actions
+  permitted:
+    - Lab tenant resources
+    - Synthetic service principals
+  authorized_systems:
+    - 10.50.0.0/16
+    - lab.techcorp.example
+  emergency_stop:
+    - Production tenant impact
+    - Credential exposure outside lab
+
+assumed_access:
+  initial_privilege: Standard user with MFA enrolled
+  initial_system: Corporate laptop
+  identity_context: Hybrid AD + Entra ID + federated SSO
+  assumptions:
+    - Valid user session on managed device
+    - MFA completed at login
+    - EDR active
+
+selected_techniques:
+  - T1078
+  - T1550
+  - T1087.004
+  - T1098
+  - T1021

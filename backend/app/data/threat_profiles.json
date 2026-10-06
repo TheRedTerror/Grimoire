@@ -1,0 +1,295 @@
+[
+  {
+    "id": "fin7",
+    "name": "FIN7",
+    "aliases": ["Carbanak", "Navigator Group"],
+    "mitre_group": "G0046",
+    "actor_type": "Financially motivated",
+    "sophistication": "High",
+    "origin": "Unknown (Eastern European suspected)",
+    "motivation": ["Financial gain"],
+    "target_industries": ["Financial Services", "Retail", "Hospitality", "Healthcare"],
+    "known_behavior": [
+      "Spearphishing with malicious documents",
+      "Credential theft and POS malware",
+      "Cloud identity abuse",
+      "Remote access trojans",
+      "Data exfiltration"
+    ],
+    "default_techniques": ["T1566", "T1087", "T1069", "T1555", "T1021", "T1078", "T1087.004", "T1098", "T1530", "T1041"],
+    "description": "Financially motivated group targeting retail, hospitality, and financial sectors with sophisticated social engineering and malware.",
+    "is_builtin": true
+  },
+  {
+    "id": "fin8",
+    "name": "FIN8",
+    "aliases": [],
+    "mitre_group": "G0061",
+    "actor_type": "Financially motivated",
+    "sophistication": "High",
+    "origin": "Unknown",
+    "motivation": ["Financial gain"],
+    "target_industries": ["Financial Services", "Retail", "Hospitality"],
+    "known_behavior": [
+      "Spearphishing",
+      "POS and payment system targeting",
+      "Living-off-the-land techniques",
+      "Lateral movement via remote services"
+    ],
+    "default_techniques": ["T1566", "T1078", "T1087", "T1021", "T1059", "T1005", "T1048"],
+    "description": "Financially motivated actor focused on payment systems and point-of-sale infrastructure.",
+    "is_builtin": true
+  },
+  {
+    "id": "apt29",
+    "name": "APT29",
+    "aliases": ["Cozy Bear", "The Dukes", "Nobelium", "Midnight Blizzard"],
+    "mitre_group": "G0016",
+    "actor_type": "Nation-state",
+    "sophistication": "Very High",
+    "origin": "Russia (SVR)",
+    "motivation": ["Espionage"],
+    "target_industries": ["Government", "Technology", "Healthcare", "Financial Services"],
+    "known_behavior": [
+      "Spearphishing and supply chain compromise",
+      "Cloud identity and OAuth abuse",
+      "Stealthy long-dwell persistence",
+      "Token theft and credential harvesting",
+      "Minimal forensic footprint"
+    ],
+    "default_techniques": ["T1566", "T1195", "T1078", "T1087", "T1021", "T1098", "T1550", "T1071", "T1041"],
+    "description": "Russian SVR-linked group known for long-dwell espionage, supply chain attacks, and cloud identity abuse.",
+    "is_builtin": true
+  },
+  {
+    "id": "apt28",
+    "name": "APT28",
+    "aliases": ["Fancy Bear", "Sofacy", "Forest Blizzard"],
+    "mitre_group": "G0007",
+    "actor_type": "Nation-state",
+    "sophistication": "Very High",
+    "origin": "Russia (GRU)",
+    "motivation": ["Espionage", "Disruption"],
+    "target_industries": ["Government", "Defense", "Media", "Energy"],
+    "known_behavior": [
+      "Spearphishing with credential harvesting",
+      "Zero-day exploitation",
+      "Credential dumping",
+      "Lateral movement",
+      "Data exfiltration"
+    ],
+    "default_techniques": ["T1566", "T1078", "T1087", "T1069", "T1555", "T1021", "T1041", "T1059"],
+    "description": "Russian GRU-linked group targeting government, defense, and geopolitical targets.",
+    "is_builtin": true
+  },
+  {
+    "id": "apt41",
+    "name": "APT41",
+    "aliases": ["Winnti Group", "Barium", "Brass Typhoon"],
+    "mitre_group": "G0096",
+    "actor_type": "Dual-purpose (espionage + financial)",
+    "sophistication": "Very High",
+    "origin": "China",
+    "motivation": ["Espionage", "Financial gain"],
+    "target_industries": ["Technology", "Healthcare", "Gaming", "Telecommunications"],
+    "known_behavior": [
+      "Supply chain attacks",
+      "Cloud service abuse",
+      "Video game industry targeting",
+      "Credential access and lateral movement",
+      "Dual espionage and financial operations"
+    ],
+    "default_techniques": ["T1195", "T1078", "T1087", "T1021", "T1555", "T1530", "T1041", "T1098"],
+    "description": "Chinese state-sponsored group conducting espionage and financially motivated operations globally.",
+    "is_builtin": true
+  },
+  {
+    "id": "lazarus",
+    "name": "Lazarus Group",
+    "aliases": ["HIDDEN COBRA", "Zinc", "Diamond Sleet"],
+    "mitre_group": "G0032",
+    "actor_type": "Nation-state",
+    "sophistication": "Very High",
+    "origin": "North Korea (DPRK)",
+    "motivation": ["Financial gain", "Espionage", "Disruption"],
+    "target_industries": ["Financial Services", "Cryptocurrency", "Defense", "Media"],
+    "known_behavior": [
+      "Destructive wiper malware",
+      "Cryptocurrency theft",
+      "Supply chain attacks",
+      "Social engineering",
+      "Custom malware toolchains"
+    ],
+    "default_techniques": ["T1566", "T1195", "T1078", "T1087", "T1021", "T1041", "T1048", "T1486"],
+    "description": "North Korean state-sponsored group known for financial theft, destructive attacks, and espionage.",
+    "is_builtin": true
+  },
+  {
+    "id": "scattered-spider",
+    "name": "Scattered Spider",
+    "aliases": ["UNC3944", "Octo Tempest", "Muddled Libra"],
+    "mitre_group": "G1015",
+    "actor_type": "Financially motivated",
+    "sophistication": "High",
+    "origin": "Unknown (English-speaking)",
+    "motivation": ["Financial gain"],
+    "target_industries": ["Technology", "Telecommunications", "Financial Services", "Gaming"],
+    "known_behavior": [
+      "Social engineering and help desk impersonation",
+      "SIM swapping and MFA fatigue",
+      "Cloud identity takeover",
+      "Ransomware deployment",
+      "Data theft for extortion"
+    ],
+    "default_techniques": ["T1078", "T1087.004", "T1098", "T1550", "T1530", "T1041", "T1486"],
+    "description": "English-speaking cybercrime group specializing in social engineering, identity abuse, and extortion.",
+    "is_builtin": true
+  },
+  {
+    "id": "volt-typhoon",
+    "name": "Volt Typhoon",
+    "aliases": ["BRONZE SILHOUETTE", "Vanguard Panda"],
+    "mitre_group": "G1017",
+    "actor_type": "Nation-state",
+    "sophistication": "Very High",
+    "origin": "China",
+    "motivation": ["Espionage", "Pre-positioning"],
+    "target_industries": ["Critical Infrastructure", "Government", "Communications", "Energy"],
+    "known_behavior": [
+      "Living-off-the-land techniques",
+      "SOHO router compromise",
+      "Long-dwell pre-positioning",
+      "Minimal malware footprint",
+      "Network device abuse"
+    ],
+    "default_techniques": ["T1078", "T1018", "T1021", "T1059", "T1087", "T1071"],
+    "description": "Chinese state-sponsored group focused on critical infrastructure pre-positioning with LOTL techniques.",
+    "is_builtin": true
+  },
+  {
+    "id": "sandworm",
+    "name": "Sandworm",
+    "aliases": ["APT44", "Voodoo Bear", "Iron Viking"],
+    "mitre_group": "G0034",
+    "actor_type": "Nation-state",
+    "sophistication": "Very High",
+    "origin": "Russia (GRU Unit 74455)",
+    "motivation": ["Disruption", "Espionage"],
+    "target_industries": ["Energy", "Government", "Critical Infrastructure", "Media"],
+    "known_behavior": [
+      "Destructive wiper attacks",
+      "ICS/OT targeting",
+      "Supply chain compromise",
+      "NotPetya-style impact",
+      "Credential access and lateral movement"
+    ],
+    "default_techniques": ["T1195", "T1078", "T1021", "T1059", "T1486", "T1041", "T1018"],
+    "description": "Russian GRU-linked group responsible for destructive attacks on critical infrastructure.",
+    "is_builtin": true
+  },
+  {
+    "id": "menuPass",
+    "name": "menuPass",
+    "aliases": ["APT10", "Stone Panda", "Potassium"],
+    "mitre_group": "G0045",
+    "actor_type": "Nation-state",
+    "sophistication": "High",
+    "origin": "China",
+    "motivation": ["Espionage"],
+    "target_industries": ["Technology", "Manufacturing", "Healthcare", "Government"],
+    "known_behavior": [
+      "Managed service provider compromise",
+      "Cloud service abuse",
+      "Credential theft",
+      "Long-dwell espionage",
+      "Intellectual property theft"
+    ],
+    "default_techniques": ["T1078", "T1087.004", "T1021", "T1098", "T1530", "T1041", "T1550"],
+    "description": "Chinese espionage group known for MSP compromise and cloud service abuse.",
+    "is_builtin": true
+  },
+  {
+    "id": "lockbit",
+    "name": "LockBit",
+    "aliases": ["LockBit 3.0", "LockBit Black"],
+    "mitre_group": null,
+    "actor_type": "Ransomware-as-a-Service",
+    "sophistication": "High",
+    "origin": "Unknown (RaaS affiliate model)",
+    "motivation": ["Financial gain"],
+    "target_industries": ["All sectors"],
+    "known_behavior": [
+      "Initial access via compromised credentials",
+      "Rapid lateral movement",
+      "Domain controller compromise",
+      "Data exfiltration for double extortion",
+      "Automated encryption deployment"
+    ],
+    "default_techniques": ["T1078", "T1087", "T1069", "T1021", "T1005", "T1048", "T1486"],
+    "description": "Prolific RaaS operation known for speed, automation, and double extortion tactics.",
+    "is_builtin": true
+  },
+  {
+    "id": "blackcat",
+    "name": "BlackCat / ALPHV",
+    "aliases": ["ALPHV", "Noberus"],
+    "mitre_group": null,
+    "actor_type": "Ransomware-as-a-Service",
+    "sophistication": "High",
+    "origin": "Unknown (RaaS affiliate model)",
+    "motivation": ["Financial gain"],
+    "target_industries": ["Healthcare", "Financial Services", "Legal", "Manufacturing"],
+    "known_behavior": [
+      "Rust-based ransomware",
+      "Triple extortion model",
+      "Initial access broker partnerships",
+      "Cross-platform targeting",
+      "Data leak site pressure"
+    ],
+    "default_techniques": ["T1078", "T1087", "T1069", "T1021", "T1005", "T1048", "T1486"],
+    "description": "Sophisticated RaaS group using Rust-based tooling and aggressive extortion.",
+    "is_builtin": true
+  },
+  {
+    "id": "ta505",
+    "name": "TA505",
+    "aliases": ["Graceful Spider", "SectorJ04"],
+    "mitre_group": "G0092",
+    "actor_type": "Financially motivated",
+    "sophistication": "High",
+    "origin": "Unknown",
+    "motivation": ["Financial gain"],
+    "target_industries": ["Financial Services", "Retail", "Healthcare"],
+    "known_behavior": [
+      "Large-scale phishing campaigns",
+      "Dridex and Clop ransomware distribution",
+      "Living-off-the-land",
+      "Credential harvesting",
+      "Data theft"
+    ],
+    "default_techniques": ["T1566", "T1078", "T1087", "T1021", "T1005", "T1048", "T1486"],
+    "description": "Financially motivated group behind Dridex and Clop, known for massive phishing operations.",
+    "is_builtin": true
+  },
+  {
+    "id": "generic-ransomware",
+    "name": "Ransomware Operator",
+    "aliases": ["Generic RaaS"],
+    "mitre_group": null,
+    "actor_type": "Financially motivated",
+    "sophistication": "Medium-High",
+    "origin": "N/A",
+    "motivation": ["Financial gain"],
+    "target_industries": ["All sectors"],
+    "known_behavior": [
+      "Initial access via compromised credentials",
+      "Discovery and enumeration",
+      "Lateral movement to domain controllers",
+      "Data staging and exfiltration",
+      "Simulated impact only"
+    ],
+    "default_techniques": ["T1078", "T1087", "T1069", "T1021", "T1005", "T1048", "T1486"],
+    "description": "Generic ransomware operator profile for readiness assessments.",
+    "is_builtin": true
+  }
+]
