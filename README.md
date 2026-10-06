@@ -1,24 +1,37 @@
-# GRIMOIRE
+# Grimoire
 
 **Guided Red-team Intelligence Mapping, Objectives, Rules & Operational Emulation**
 
-Standalone adversary emulation planning tool by [NetPhantom Security](https://netphantomsecurity.com/).
-
-GRIMOIRE helps red team leads, purple team operators, and security consultants scope, plan, and document adversary emulation exercises — without executing attacks.
+Grimoire is a standalone adversary emulation planning tool by [NetPhantom Security](https://netphantomsecurity.com/). It helps red team leads, purple team operators, and security consultants scope, plan, and document adversary emulation exercises — without executing attacks.
 
 > **Planning tool only.** No C2, no agents, no recon execution, no autonomous exploitation.
+
+---
+
+## Features
+
+| Module | What it does |
+|--------|--------------|
+| **Engagement Wizard** | Point-and-click campaign setup with 8 engagement types and 14 built-in threat actor profiles |
+| **Threat Modeling** | FIN7, APT29, Scattered Spider, custom profiles, ATT&CK technique selection |
+| **Facility Map** | Drag-and-drop site plan — zones, physical controls, movement paths, RF surfaces |
+| **Operation Plan** | Unified cyber + physical plan view with integrated phase timeline |
+| **Campaign Graph** | Kill chain visualization with decision points and technique nodes |
+| **Detection Matrix** | Map defensive controls to operator goals and detection questions |
+| **Report Export** | HTML (print-to-PDF), Markdown, YAML, JSON |
 
 ---
 
 ## Quick Start
 
 ```bash
-git clone <your-repo-url> grimoire && cd grimoire
+git clone https://github.com/TheRedTerror/Grimoire.git
+cd Grimoire
 ./start.sh
 ```
 
-- **App:** http://localhost:3000  
-- **API:** http://localhost:8000/docs  
+- **App:** http://localhost:3000
+- **API:** http://localhost:8000/docs
 
 Or manually:
 
@@ -29,24 +42,22 @@ docker compose up --build
 
 ---
 
-## What It Does
+## Workflow
 
-| Input | Output |
-|-------|--------|
-| Threat profile (FIN7, APT29, custom…) | Operation plan with mission & objectives |
-| Environment (AD, Azure, EDR, SIEM) | ATT&CK mapping filtered by relevance |
-| Objectives & constraints | Rules of engagement + risk rating |
-| Technique selection | Campaign graph with decision points |
-| Defensive controls | Detection matrix + evidence requirements |
-
-**Export:** HTML report (print-to-PDF), Markdown, YAML, JSON
+1. **New Engagement** — pick engagement type, threat actor, and objectives
+2. **Facility Map** *(optional)* — build target site plan and compile physical attack plan
+3. **Threat / Environment / Scope** — refine actor, target environment, ROE, and constraints
+4. **Techniques** — select ATT&CK TTPs filtered by relevance
+5. **Operation Plan** — unified cyber + physical deliverable with campaign graph
+6. **Detection** — validate defensive coverage against the plan
+7. **Report** — export deliverables for stakeholders
 
 ---
 
 ## Project Structure
 
 ```
-grimoire/
+Grimoire/
 ├── backend/          FastAPI + PostgreSQL + Jinja2 reports
 ├── frontend/         Next.js 15 + React Flow
 ├── campaigns/        Example portable YAML campaign defs
@@ -83,7 +94,7 @@ NEXT_PUBLIC_API_URL=http://localhost:8000 npm run dev
 | Version | Features |
 |---------|----------|
 | **v0.1** | Campaign creation, threat profiles, ATT&CK selection, graph, export |
-| **v0.2** | Engagement wizard, custom profiles, HTML reports, ops UI |
+| **v0.2** | Engagement wizard, custom profiles, HTML reports, ops UI, facility mapping |
 | **v0.3** | Post-operation scoring, multi-audience report generation |
 
 ---
@@ -92,4 +103,4 @@ NEXT_PUBLIC_API_URL=http://localhost:8000 npm run dev
 
 MIT — see [LICENSE](LICENSE)
 
-**GRIMOIRE** is an independent open-source project. It is not part of The Black Book Society or any commercial attack platform.
+**Grimoire** is an independent open-source project. It is not part of The Black Book Society or any commercial attack platform.
