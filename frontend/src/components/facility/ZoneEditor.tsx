@@ -1,7 +1,7 @@
 "use client";
 
 import type { ControlTypeId, FacilityZone, ZoneTypeInfo } from "@/types/facility";
-import { CONTROL_LABELS } from "@/types/facility";
+import { CONTROL_LABELS, DEFAULT_ZONE_SIZE } from "@/types/facility";
 
 const ALL_CONTROLS: ControlTypeId[] = [
   "cctv", "guard", "rfid", "lock", "biometric", "alarm", "wifi", "ble", "nfc", "mantrap",
@@ -27,7 +27,7 @@ export default function ZoneEditor({ zone, zoneTypes, onChange, onDelete }: Zone
       <div className="flex justify-between items-start">
         <div className="text-[9px] uppercase tracking-widest text-grimoire-muted">Zone Editor</div>
         <button onClick={onDelete} className="text-[10px] text-grimoire-danger hover:underline">
-          Remove
+          Remove (Del)
         </button>
       </div>
 
@@ -38,6 +38,47 @@ export default function ZoneEditor({ zone, zoneTypes, onChange, onDelete }: Zone
           value={zone.label}
           onChange={(e) => onChange({ ...zone, label: e.target.value })}
         />
+      </div>
+
+      <div>
+        <label className="grimoire-label">Map Size (px)</label>
+        <div className="grid grid-cols-2 gap-2">
+          <input
+            type="number"
+            min={100}
+            max={480}
+            className="grimoire-input text-xs"
+            value={zone.size?.width ?? DEFAULT_ZONE_SIZE.width}
+            onChange={(e) =>
+              onChange({
+                ...zone,
+                size: {
+                  width: Number(e.target.value) || DEFAULT_ZONE_SIZE.width,
+                  height: zone.size?.height ?? DEFAULT_ZONE_SIZE.height,
+                },
+              })
+            }
+          />
+          <input
+            type="number"
+            min={56}
+            max={320}
+            className="grimoire-input text-xs"
+            value={zone.size?.height ?? DEFAULT_ZONE_SIZE.height}
+            onChange={(e) =>
+              onChange({
+                ...zone,
+                size: {
+                  width: zone.size?.width ?? DEFAULT_ZONE_SIZE.width,
+                  height: Number(e.target.value) || DEFAULT_ZONE_SIZE.height,
+                },
+              })
+            }
+          />
+        </div>
+        <p className="text-[9px] text-grimoire-muted/60 mt-1">
+          Or select the zone on the map and drag its corner handles to resize.
+        </p>
       </div>
 
       <div>

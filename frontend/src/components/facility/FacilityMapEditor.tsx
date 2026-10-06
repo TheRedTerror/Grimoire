@@ -6,8 +6,6 @@ import {
   Background,
   Controls,
   MiniMap,
-  Handle,
-  Position,
   useNodesState,
   useEdgesState,
   useReactFlow,
@@ -17,11 +15,13 @@ import {
   type Edge,
   type Connection,
   type OnNodeDrag,
+  type NodeChange,
   MarkerType,
 } from "@xyflow/react";
 import ZonePalette from "./ZonePalette";
-import type { ControlTypeId, FacilityCreate, ZoneTypeId, ZoneTypeInfo } from "@/types/facility";
-import { CONTROL_LABELS } from "@/types/facility";
+import ZoneNode from "./ZoneNode";
+import type { FacilityCreate, ZoneTypeInfo } from "@/types/facility";
+import { DEFAULT_ZONE_SIZE } from "@/types/facility";
 
 interface FacilityMapEditorProps {
   facility: FacilityCreate;
@@ -31,52 +31,14 @@ interface FacilityMapEditorProps {
   onSelectZone: (id: string | null) => void;
   onChange: (facility: FacilityCreate) => void;
   onAddZone: (zoneType: ZoneTypeInfo) => void;
+  onDeleteZone: (zoneId: string) => void;
 }
 
-function ZoneNode({
-  data,
-}: {
-  data: {
-    label: string;
-    zoneType: ZoneTypeId;
-    controls: ControlTypeId[];
-    color: string;
-    isNew?: boolean;
+function zoneDimensions(zone: { size?: { width: number; height: number } }) {
+  return {
+    width: zone.size?.width ?? DEFAULT_ZONE_SIZE.width,
+    height: zone.size?.height ?? DEFAULT_ZONE_SIZE.height,
   };
-}) {
-  return (
-    <div
-      className={`facility-zone-node ${data.isNew ? "facility-zone-node-new" : ""}`}
-      style={{ borderColor: data.color, boxShadow: `0 0 12px ${data.color}33` }}
-    >
-      <Handle type="target" position={Position.Top} className="facility-zone-handle" />
-      <Handle type="source" position={Position.Bottom} className="facility-zone-handle" />
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="right"
-        className="facility-zone-handle facility-zone-handle-alt"
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        id="left"
-        className="facility-zone-handle facility-zone-handle-alt"
-      />
-      <div className="facility-zone-type" style={{ background: `${data.color}22`, color: data.color }}>
-        {data.zoneType.replace("_", " ")}
-      </div>
-      <div className="facility-zone-label">{data.label}</div>
-      {data.controls.length > 0 && (
-        <div className="facility-zone-controls">
-          {data.controls.slice(0, 3).map((c) => (
-            <span key={c}>{CONTROL_LABELS[c]?.slice(0, 3) || c}</span>
-          ))}
-          {data.controls.length > 3 && <span>+{data.controls.length - 3}</span>}
-        </div>
-      )}
-    </div>
-  );
 }
 
 const nodeTypes = { zone: ZoneNode };
@@ -107,6 +69,7 @@ function FacilityMapCanvas({
   onSelectZone,
   onChange,
   onAddZone,
+  onDeleteZone,
 }: FacilityMapEditorProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
@@ -121,10 +84,13 @@ function FacilityMapCanvas({
   useEffect(() => {
     const flowNodes: Node[] = facility.zones.map((z) => {
       const info = typeMap[z.zone_type];
+      const { width, height } = zoneDimensions(z);
       return {
         id: z.id,
         type: "zone",
         position: z.position,
+        width,
+        height,
         data: {
           label: z.label,
           zoneType: z.zone_type,
@@ -134,6 +100,7 @@ function FacilityMapCanvas({
         },
         selected: z.id === selectedZoneId,
         draggable: true,
+        deletable: true,
       };
     });
 
@@ -154,6 +121,32 @@ function FacilityMapCanvas({
     setNodes(flowNodes);
     setEdges(flowEdges);
   }, [facility.zones, facility.paths, selectedZoneId, focusZoneId, typeMap, setNodes, setEdges]);
+
+  const persistZoneSize = useCallback(
+    (zoneId: string, width: number, height: number) => {
+      const updated = facility.zones.map((z) =>
+        z.id === zoneId ? { ...z, size: { width: Math.round(width), height: Math.round(height) } } : z
+      );
+      onChange({ ...facility, zones: updated });
+    },
+    [facility, onChange]
+  );
+
+  const handleNodesChange = useCallback(
+    (changes: NodeChange[]) => {
+      onNodesChange(changes);
+      for (const change of changes) {
+        if (
+          change.type === "dimensions" &&
+          change.dimensions &&
+          change.resizing === false
+        ) {
+          persistZoneSize(change.id, change.dimensions.width, change.dimensions.height);
+        }
+      }
+    },
+    [onNodesChange, persistZoneSize]
+  );
 
   const onNodeDragStop: OnNodeDrag = useCallback(
     (_, node) => {
@@ -185,13 +178,20 @@ function FacilityMapCanvas({
     [onSelectZone]
   );
 
+  const onNodesDelete = useCallback(
+    (deleted: Node[]) => {
+      deleted.forEach((node) => onDeleteZone(node.id));
+    },
+    [onDeleteZone]
+  );
+
   return (
     <div className="facility-map-canvas relative">
       {!isEmpty && (
         <div className="absolute top-2 left-2 right-2 z-10 pointer-events-none">
           <span className="text-[9px] uppercase tracking-[0.15em] text-grimoire-muted/70 bg-grimoire-bg/90 px-2 py-1 border border-grimoire-border/30">
-            {facility.zones.length} zone{facility.zones.length !== 1 ? "s" : ""} on map · drag cards to
-            move · drag dots to connect
+            {facility.zones.length} zone{facility.zones.length !== 1 ? "s" : ""} · drag to move · select
+            and drag corners to resize · Del to remove · drag dots to connect
           </span>
         </div>
       )}
@@ -215,16 +215,18 @@ function FacilityMapCanvas({
       <ReactFlow
         nodes={nodes}
         edges={edges}
-        onNodesChange={onNodesChange}
+        onNodesChange={handleNodesChange}
         onEdgesChange={onEdgesChange}
         onNodeDragStop={onNodeDragStop}
         onConnect={onConnect}
         onNodeClick={onNodeClick}
+        onNodesDelete={onNodesDelete}
         onPaneClick={() => onSelectZone(null)}
         nodeTypes={nodeTypes}
         nodesDraggable
         nodesConnectable
         elementsSelectable
+        deleteKeyCode={["Delete", "Backspace"]}
         panOnDrag={[1, 2]}
         panOnScroll
         zoomOnScroll

@@ -14,11 +14,28 @@ Grimoire is a standalone adversary emulation planning tool by [NetPhantom Securi
 |--------|--------------|
 | **Engagement Wizard** | Point-and-click campaign setup with 8 engagement types and 14 built-in threat actor profiles |
 | **Threat Modeling** | FIN7, APT29, Scattered Spider, custom profiles, ATT&CK technique selection |
-| **Facility Map** | Drag-and-drop site plan — zones, physical controls, movement paths, RF surfaces |
+| **Facility Map** | Interactive floor plan — building-style zone cards, movement paths, physical controls, RF surfaces |
 | **Operation Plan** | Unified cyber + physical plan view with integrated phase timeline |
 | **Campaign Graph** | Kill chain visualization with decision points and technique nodes |
 | **Detection Matrix** | Map defensive controls to operator goals and detection questions |
 | **Report Export** | HTML (print-to-PDF), Markdown, YAML, JSON |
+
+---
+
+## Facility Map
+
+Build a target site layout for physical security planning (authorized simulations only).
+
+| Capability | How it works |
+|------------|--------------|
+| **Add zones** | Click **+ Add to Map** for Perimeter, Entry, Secure Vault, RF Enclosure, Network Closet, and more |
+| **Floor plan graphics** | Each zone type renders an architectural layout (vault walls, entry door arc, server racks, parking stalls, etc.) |
+| **Move** | Drag zone cards on the canvas |
+| **Resize** | Select a zone and drag corner handles, or set pixel dimensions in the Zone Editor |
+| **Connect paths** | Drag connector dots between zones to define movement routes |
+| **Remove** | Select a zone and press **Delete** or **Backspace** |
+| **Templates** | Load corporate office, retail branch, or datacenter starter layouts |
+| **Compile** | Generate a physical attack plan merged into the unified Operation Plan (SEC-06) |
 
 ---
 
@@ -89,13 +106,29 @@ NEXT_PUBLIC_API_URL=http://localhost:8000 npm run dev
 
 ---
 
+## Changelog
+
+### v0.2 (current)
+
+- Unified **Operation Plan** — cyber and physical plans in one view with integrated phase timeline
+- **Facility Map** — interactive site builder with 10 zone types and floor plan graphics
+- Zone **resize** (drag handles), **delete** (Del/Backspace), and **+ Add to Map** controls
+- Facility templates, movement path editor, physical plan compiler
+- Dark ops-console UI, engagement wizard, custom threat profiles, HTML report export
+
+### v0.1
+
+- Campaign creation, threat profiles, ATT&CK selection, graph, YAML/JSON export
+
+---
+
 ## Roadmap
 
 | Version | Features |
 |---------|----------|
-| **v0.1** | Campaign creation, threat profiles, ATT&CK selection, graph, export |
-| **v0.2** | Engagement wizard, custom profiles, HTML reports, ops UI, facility mapping |
-| **v0.3** | Post-operation scoring, multi-audience report generation |
+| **v0.2** | Facility mapping, unified plans, ops UI, custom profiles *(current)* |
+| **v0.3** | Persist facility data to campaigns, physical plan in report export |
+| **v0.4** | Post-operation scoring, multi-audience report generation |
 
 ---
 

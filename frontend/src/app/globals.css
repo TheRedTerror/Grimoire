@@ -215,8 +215,11 @@ body {
   height: 100%;
   min-height: 420px;
   background:
+    linear-gradient(rgba(139, 0, 24, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 0, 24, 0.03) 1px, transparent 1px),
     radial-gradient(circle at 50% 50%, rgba(20, 10, 10, 0.4) 0%, transparent 70%),
     #010101;
+  background-size: 24px 24px, 24px 24px, 100% 100%, 100% 100%;
 }
 
 .facility-map-canvas .react-flow {
@@ -237,39 +240,116 @@ body {
 }
 
 .facility-zone-node {
-  background: linear-gradient(180deg, #0e0c0c 0%, #080808 100%);
-  border: 1px solid #3a2020;
-  min-width: 140px;
+  position: relative;
+  background: #080808;
+  border: 2px solid var(--zone-accent, #3a2020);
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
-}
-
-.facility-zone-type {
-  padding: 3px 8px;
-  font-size: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-}
-
-.facility-zone-label {
-  padding: 8px 10px 4px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--grimoire-text-bright);
-}
-
-.facility-zone-controls {
-  padding: 0 10px 8px;
   display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
+  flex-direction: column;
 }
 
-.facility-zone-controls span {
+.facility-zone-node-selected {
+  border-color: var(--grimoire-accent) !important;
+  box-shadow: 0 0 0 1px rgba(139, 0, 24, 0.5), 0 4px 20px rgba(139, 0, 24, 0.2) !important;
+}
+
+.facility-zone-plan-layer {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  padding: 22px 6px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.facility-zone-floorplan {
+  width: 100%;
+  height: 100%;
+  min-height: 48px;
+  pointer-events: none;
+  display: block;
+}
+
+.facility-zone-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 4px 8px;
+  background: linear-gradient(180deg, rgba(8, 8, 8, 0.92) 0%, rgba(8, 8, 8, 0.55) 80%, transparent 100%);
+  pointer-events: none;
+}
+
+.facility-zone-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  padding: 4px 8px;
+  background: linear-gradient(0deg, rgba(8, 8, 8, 0.92) 0%, rgba(8, 8, 8, 0.55) 80%, transparent 100%);
+  pointer-events: none;
+}
+
+.facility-zone-footer span {
   font-size: 8px;
   padding: 1px 4px;
   border: 1px solid var(--grimoire-border);
   color: var(--grimoire-muted);
+  background: rgba(10, 10, 10, 0.8);
+}
+
+/* Per-type wall treatments */
+.facility-zone-layout--perimeter { border-style: dashed; border-width: 2px; }
+.facility-zone-layout--entry { border-width: 2px; }
+.facility-zone-layout--secure { border-width: 3px; }
+.facility-zone-layout--rf_enclosure {
+  border-style: dotted;
+  background: repeating-linear-gradient(
+    -45deg,
+    #080808,
+    #080808 4px,
+    #0a0c10 4px,
+    #0a0c10 8px
+  );
+}
+.facility-zone-layout--network { border-left-width: 4px; }
+.facility-zone-layout--parking { border-radius: 0; min-height: 72px; }
+.facility-zone-layout--utility { border-right-width: 4px; border-right-color: var(--zone-accent); }
+
+.facility-zone-resizer-line {
+  border-color: rgba(139, 0, 24, 0.8) !important;
+}
+
+.facility-zone-resizer-handle {
+  width: 8px !important;
+  height: 8px !important;
+  background: #8b0018 !important;
+  border: 1px solid #cc0022 !important;
+  border-radius: 0 !important;
+}
+
+.facility-zone-type {
+  font-size: 7px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+}
+
+.facility-zone-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--grimoire-text-bright);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
 }
 
 .facility-zone-handle {

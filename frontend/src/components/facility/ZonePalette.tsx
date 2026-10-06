@@ -1,6 +1,7 @@
 "use client";
 
 import type { ZoneTypeInfo } from "@/types/facility";
+import { ZONE_DEFAULT_SIZES } from "./ZoneFloorPlan";
 
 interface ZonePaletteProps {
   zoneTypes: ZoneTypeInfo[];
@@ -43,6 +44,9 @@ export default function ZonePalette({
             {!compact && (
               <span className="block text-[9px] text-grimoire-muted mt-0.5 line-clamp-1">
                 {zt.description}
+                <span className="text-grimoire-muted/50 ml-1">
+                  · {ZONE_DEFAULT_SIZES[zt.id].width}×{ZONE_DEFAULT_SIZES[zt.id].height}
+                </span>
               </span>
             )}
           </span>

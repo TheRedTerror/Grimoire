@@ -12,13 +12,13 @@ const STEPS = [
   },
   {
     n: "02",
-    title: "Move zones on the map",
-    body: "After a zone appears on the canvas, click and hold that zone card, then drag it to reposition. Left-drag only works on zone cards — dragging empty space pans the view.",
+    title: "Move & resize zones",
+    body: "Drag a zone card to reposition it. Click a zone to select it, then drag the corner/edge handles to resize the area on the floor plan. You can also set exact pixel dimensions in the Zone Editor.",
   },
   {
     n: "03",
-    title: "Edit zone details",
-    body: "Click a zone to select it. The right panel opens the Zone Editor — rename the label, toggle physical controls (CCTV, RFID, Wi-Fi, BLE…), list assets, and add operator notes.",
+    title: "Edit or remove zones",
+    body: "Click a zone to select it and edit in the right panel. Press Delete or Backspace (when not typing in a field) to remove the selected zone from the map. Connected movement paths are removed automatically.",
   },
   {
     n: "04",

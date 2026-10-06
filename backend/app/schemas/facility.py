@@ -36,6 +36,7 @@ class FacilityZone(BaseModel):
     zone_type: ZoneType
     floor: int = 1
     position: dict[str, float] = Field(default_factory=lambda: {"x": 0, "y": 0})
+    size: dict[str, float] | None = None
     controls: list[ControlType] = Field(default_factory=list)
     assets: list[str] = Field(default_factory=list)
     notes: str = ""

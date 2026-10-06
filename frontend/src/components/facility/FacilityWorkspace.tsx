@@ -9,6 +9,7 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import TacticalFrame from "@/components/brand/TacticalFrame";
 import type { FacilityCreate, PhysicalAttackPlan, ZoneTypeInfo } from "@/types/facility";
 import { DEFAULT_FACILITY } from "@/types/facility";
+import { ZONE_DEFAULT_SIZES } from "@/components/facility/ZoneFloorPlan";
 import {
   generatePhysicalPlan,
   getFacilityTemplates,
@@ -66,6 +67,7 @@ export default function FacilityWorkspace({
         zone_type: zoneType.id,
         floor: 1,
         position: { x: 80 + col * 180, y: 80 + row * 120 },
+        size: { ...ZONE_DEFAULT_SIZES[zoneType.id] },
         controls: [...zoneType.default_controls],
         assets: [],
         notes: "",
@@ -88,14 +90,34 @@ export default function FacilityWorkspace({
     });
   };
 
-  const deleteZone = (id: string) => {
-    onFacilityChange({
-      ...facility,
-      zones: facility.zones.filter((z) => z.id !== id),
-      paths: facility.paths.filter((p) => p.source !== id && p.target !== id),
-    });
-    setSelectedZoneId(null);
-  };
+  const deleteZone = useCallback(
+    (id: string) => {
+      onFacilityChange({
+        ...facility,
+        zones: facility.zones.filter((z) => z.id !== id),
+        paths: facility.paths.filter((p) => p.source !== id && p.target !== id),
+      });
+      setSelectedZoneId(null);
+    },
+    [facility, onFacilityChange]
+  );
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Delete" && e.key !== "Backspace") return;
+      if (!selectedZoneId) return;
+      const target = e.target as HTMLElement | null;
+      if (
+        target?.closest("input, textarea, select, [contenteditable='true']")
+      ) {
+        return;
+      }
+      e.preventDefault();
+      deleteZone(selectedZoneId);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [selectedZoneId, deleteZone]);
 
   const loadTemplate = async (templateId: string) => {
     setLoading(true);
@@ -221,6 +243,7 @@ export default function FacilityWorkspace({
               onSelectZone={setSelectedZoneId}
               onChange={onFacilityChange}
               onAddZone={addZone}
+              onDeleteZone={deleteZone}
             />
           </div>
         </TacticalFrame>

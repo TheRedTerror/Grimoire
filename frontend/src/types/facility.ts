@@ -22,12 +22,20 @@ export type ControlTypeId =
   | "nfc"
   | "mantrap";
 
+export interface ZoneSize {
+  width: number;
+  height: number;
+}
+
+export const DEFAULT_ZONE_SIZE: ZoneSize = { width: 160, height: 88 };
+
 export interface FacilityZone {
   id: string;
   label: string;
   zone_type: ZoneTypeId;
   floor: number;
   position: { x: number; y: number };
+  size?: ZoneSize;
   controls: ControlTypeId[];
   assets: string[];
   notes: string;
