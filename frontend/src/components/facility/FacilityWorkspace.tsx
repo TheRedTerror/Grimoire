@@ -2,7 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 import FacilityMapEditor from "./FacilityMapEditor";
+import FacilityMapGuide from "./FacilityMapGuide";
 import ZoneEditor from "./ZoneEditor";
+import ZonePalette from "./ZonePalette";
 import SectionHeader from "@/components/ui/SectionHeader";
 import TacticalFrame from "@/components/brand/TacticalFrame";
 import type { FacilityCreate, PhysicalAttackPlan, ZoneTypeInfo } from "@/types/facility";
@@ -36,8 +38,10 @@ export default function FacilityWorkspace({
   const [zoneTypes, setZoneTypes] = useState<ZoneTypeInfo[]>([]);
   const [templates, setTemplates] = useState<{ id: string; name: string; description: string }[]>([]);
   const [selectedZoneId, setSelectedZoneId] = useState<string | null>(null);
+  const [focusZoneId, setFocusZoneId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [addedToast, setAddedToast] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([getZoneTypes(), getFacilityTemplates()])
@@ -50,21 +54,32 @@ export default function FacilityWorkspace({
 
   const selectedZone = facility.zones.find((z) => z.id === selectedZoneId) || null;
 
-  const addZone = (zoneType: ZoneTypeInfo) => {
-    const id = `zone-${Date.now()}`;
-    const newZone = {
-      id,
-      label: `${zoneType.label} ${facility.zones.filter((z) => z.zone_type === zoneType.id).length + 1}`,
-      zone_type: zoneType.id,
-      floor: 1,
-      position: { x: 120 + facility.zones.length * 40, y: 180 + (facility.zones.length % 3) * 60 },
-      controls: [...zoneType.default_controls],
-      assets: [],
-      notes: "",
-    };
-    onFacilityChange({ ...facility, zones: [...facility.zones, newZone] });
-    setSelectedZoneId(id);
-  };
+  const addZone = useCallback(
+    (zoneType: ZoneTypeInfo) => {
+      const id = `zone-${Date.now()}`;
+      const count = facility.zones.filter((z) => z.zone_type === zoneType.id).length;
+      const col = facility.zones.length % 4;
+      const row = Math.floor(facility.zones.length / 4);
+      const newZone = {
+        id,
+        label: `${zoneType.label} ${count + 1}`,
+        zone_type: zoneType.id,
+        floor: 1,
+        position: { x: 80 + col * 180, y: 80 + row * 120 },
+        controls: [...zoneType.default_controls],
+        assets: [],
+        notes: "",
+      };
+      onFacilityChange({ ...facility, zones: [...facility.zones, newZone] });
+      setSelectedZoneId(id);
+      setFocusZoneId(id);
+      setAddedToast(`${zoneType.label} added to map`);
+      setError(null);
+      window.setTimeout(() => setFocusZoneId(null), 800);
+      window.setTimeout(() => setAddedToast(null), 2500);
+    },
+    [facility, onFacilityChange]
+  );
 
   const updateZone = (updated: typeof facility.zones[0]) => {
     onFacilityChange({
@@ -97,7 +112,7 @@ export default function FacilityWorkspace({
 
   const compilePhysicalPlan = useCallback(async () => {
     if (facility.zones.length === 0) {
-      setError("Add at least one zone to the facility map");
+      setError("Add at least one zone using the + Add to Map buttons");
       return;
     }
     setLoading(true);
@@ -119,12 +134,18 @@ export default function FacilityWorkspace({
   }, [facility, actorName, engagementType, prohibited, permitted, onPhysicalPlanChange]);
 
   return (
-    <div className="h-full flex flex-col gap-3">
+    <div className="flex-1 flex flex-col gap-3 min-h-0">
       <SectionHeader
         refId="SEC-F1"
         title="Facility Creation Map"
-        subtitle="Build the target site plan — zones, physical controls, movement paths, and RF surfaces. Physical plan merges into Operation Plan."
+        subtitle="Use + Add to Map buttons to place zones, then drag them on the canvas to lay out your site."
       />
+
+      {addedToast && (
+        <div className="text-[10px] text-grimoire-accent border border-grimoire-accent/30 px-3 py-2 bg-grimoire-accent/5 animate-pulse">
+          ✓ {addedToast} — drag it on the map to reposition
+        </div>
+      )}
 
       {error && (
         <div className="text-[10px] text-grimoire-danger border border-grimoire-danger/30 px-3 py-2 bg-grimoire-danger/5">
@@ -168,31 +189,38 @@ export default function FacilityWorkspace({
         </button>
       </div>
 
-      <div className="flex-1 flex gap-2 min-h-0 overflow-hidden">
-        <div className="w-44 flex-shrink-0 overflow-y-auto space-y-1 p-2 bg-grimoire-bg/60 border border-grimoire-border/40">
-          <div className="text-[9px] uppercase tracking-widest text-grimoire-muted mb-2 px-1">
-            Add Zone
-          </div>
-          {zoneTypes.map((zt) => (
-            <button
-              key={zt.id}
-              onClick={() => addZone(zt)}
-              className="w-full text-left px-2 py-1.5 text-[10px] border border-grimoire-border/30 hover:border-grimoire-accent/40 transition-colors"
-              style={{ borderLeftColor: zt.color, borderLeftWidth: 2 }}
-            >
-              <span className="text-grimoire-text">{zt.label}</span>
-            </button>
-          ))}
+      <details className="group shrink-0 border border-grimoire-border/40 bg-grimoire-bg/50">
+        <summary className="cursor-pointer px-3 py-2 text-[11px] text-grimoire-text list-none flex justify-between items-center">
+          <span>
+            <span className="text-[9px] font-mono text-grimoire-accent tracking-widest mr-2">GUIDE</span>
+            How to use the facility map
+          </span>
+          <span className="text-[10px] text-grimoire-muted group-open:hidden">Show</span>
+          <span className="text-[10px] text-grimoire-muted hidden group-open:inline">Hide</span>
+        </summary>
+        <div className="border-t border-grimoire-border/30 max-h-48 overflow-y-auto">
+          <FacilityMapGuide hasZones={facility.zones.length > 0} />
+        </div>
+      </details>
+
+      <div className="flex-1 flex gap-2 min-h-[420px] overflow-hidden">
+        <div className="w-52 flex-shrink-0 overflow-y-auto p-3 bg-grimoire-bg/60 border border-grimoire-border/40">
+          <ZonePalette zoneTypes={zoneTypes} onAdd={addZone} />
+          <p className="text-[9px] text-grimoire-muted/60 mt-3 pt-2 border-t border-grimoire-border/20">
+            {facility.zones.length} zone{facility.zones.length !== 1 ? "s" : ""} on map
+          </p>
         </div>
 
-        <TacticalFrame label="Floor Plan" className="flex-1 min-w-0 flex flex-col" variant="accent">
-          <div className="flex-1 min-h-[400px]">
+        <TacticalFrame label="Floor Plan" className="flex-1 min-w-0 flex flex-col min-h-[420px]" variant="accent">
+          <div className="flex-1 min-h-[420px] h-full">
             <FacilityMapEditor
               facility={facility}
               zoneTypes={zoneTypes}
               selectedZoneId={selectedZoneId}
+              focusZoneId={focusZoneId}
               onSelectZone={setSelectedZoneId}
               onChange={onFacilityChange}
+              onAddZone={addZone}
             />
           </div>
         </TacticalFrame>
@@ -206,8 +234,12 @@ export default function FacilityWorkspace({
               onDelete={() => deleteZone(selectedZone.id)}
             />
           ) : (
-            <div className="p-3 text-[10px] text-grimoire-muted border border-grimoire-border/30 h-full">
-              Select a zone on the map to edit controls, assets, and notes.
+            <div className="p-3 text-[10px] text-grimoire-muted border border-grimoire-border/30 h-full space-y-2">
+              <p className="text-grimoire-text/80">No zone selected</p>
+              <p>
+                First, click <strong className="text-grimoire-accent">+ Add to Map</strong> in the
+                left panel to place a zone. Then click the zone on the canvas to edit it here.
+              </p>
             </div>
           )}
         </div>

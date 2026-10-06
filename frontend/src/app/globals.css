@@ -210,10 +210,30 @@ body {
 }
 
 /* Facility map */
-.facility-map-bg {
+.facility-map-canvas {
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
   background:
     radial-gradient(circle at 50% 50%, rgba(20, 10, 10, 0.4) 0%, transparent 70%),
     #010101;
+}
+
+.facility-map-canvas .react-flow {
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+}
+
+.react-flow__node-zone {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.react-flow__node-zone.selected {
+  box-shadow: none !important;
 }
 
 .facility-zone-node {
@@ -250,6 +270,36 @@ body {
   padding: 1px 4px;
   border: 1px solid var(--grimoire-border);
   color: var(--grimoire-muted);
+}
+
+.facility-zone-handle {
+  width: 10px !important;
+  height: 10px !important;
+  background: rgba(139, 0, 24, 0.7) !important;
+  border: 1px solid #8b0018 !important;
+  opacity: 0.5;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.facility-zone-handle-alt {
+  width: 8px !important;
+  height: 8px !important;
+  opacity: 0.35;
+}
+
+.facility-zone-node:hover .facility-zone-handle,
+.facility-zone-node.selected .facility-zone-handle {
+  opacity: 1;
+}
+
+.facility-zone-node-new {
+  animation: zone-placed 0.8s ease-out;
+}
+
+@keyframes zone-placed {
+  0% { box-shadow: 0 0 0 0 rgba(139, 0, 24, 0.6); }
+  70% { box-shadow: 0 0 0 12px rgba(139, 0, 24, 0); }
+  100% { box-shadow: 0 0 12px rgba(139, 0, 24, 0.2); }
 }
 
 /* Risk badges */

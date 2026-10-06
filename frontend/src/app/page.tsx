@@ -183,7 +183,7 @@ export default function Home() {
           </div>
 
           {nav === "facility" && (
-            <div className="p-5 overflow-y-auto flex-1">
+            <div className="p-5 flex-1 flex flex-col min-h-0 overflow-hidden">
               <FacilityWorkspace
                 actorName={campaign.threat_profile.actor_name}
                 engagementType={campaign.engagement.type}
