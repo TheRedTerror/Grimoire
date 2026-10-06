@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import SectionHeader from "@/components/ui/SectionHeader";
 import ListEditor from "./ListEditor";
 import type { CampaignCreate, NavSection, ThreatProfile } from "@/types/campaign";
@@ -38,6 +39,133 @@ interface CampaignFormProps {
   onChange: (data: CampaignCreate) => void;
   threatProfiles: ThreatProfile[];
   allTechniques: { id: string; name: string; tactic: string }[];
+}
+
+function TechniqueSelection({
+  meta,
+  data,
+  allTechniques,
+  onToggle,
+}: {
+  meta?: { ref: string; title: string; subtitle: string };
+  data: CampaignCreate;
+  allTechniques: { id: string; name: string; tactic: string }[];
+  onToggle: (id: string) => void;
+}) {
+  const [query, setQuery] = useState("");
+  const [tacticFilter, setTacticFilter] = useState("all");
+  const [selectedOnly, setSelectedOnly] = useState(false);
+
+  const selected = useMemo(() => new Set(data.selected_techniques), [data.selected_techniques]);
+
+  const tactics = useMemo(
+    () => [...new Set(allTechniques.map((t) => t.tactic))].sort(),
+    [allTechniques]
+  );
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return allTechniques.filter((t) => {
+      if (selectedOnly && !selected.has(t.id)) return false;
+      if (tacticFilter !== "all" && t.tactic !== tacticFilter) return false;
+      if (!q) return true;
+      return (
+        t.id.toLowerCase().includes(q) ||
+        t.name.toLowerCase().includes(q) ||
+        t.tactic.toLowerCase().includes(q)
+      );
+    });
+  }, [allTechniques, query, selected, selectedOnly, tacticFilter]);
+
+  const byTactic = useMemo(
+    () =>
+      filtered.reduce(
+        (acc, t) => {
+          if (!acc[t.tactic]) acc[t.tactic] = [];
+          acc[t.tactic].push(t);
+          return acc;
+        },
+        {} as Record<string, typeof allTechniques>
+      ),
+    [filtered]
+  );
+
+  return (
+    <div className="space-y-4">
+      {meta && <SectionHeader refId={meta.ref} title={meta.title} subtitle={meta.subtitle} />}
+      <div className="flex flex-wrap gap-3 items-end">
+        <div className="flex-1 min-w-[200px]">
+          <label className="text-xs text-grimoire-muted block mb-1">Search</label>
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="ID, name, or tactic…"
+            className="w-full bg-grimoire-bg border border-grimoire-border rounded px-3 py-2 text-sm"
+          />
+        </div>
+        <div>
+          <label className="text-xs text-grimoire-muted block mb-1">Tactic</label>
+          <select
+            value={tacticFilter}
+            onChange={(e) => setTacticFilter(e.target.value)}
+            className="bg-grimoire-bg border border-grimoire-border rounded px-3 py-2 text-sm"
+          >
+            <option value="all">All tactics</option>
+            {tactics.map((tactic) => (
+              <option key={tactic} value={tactic}>
+                {tactic}
+              </option>
+            ))}
+          </select>
+        </div>
+        <label className="flex items-center gap-2 text-sm pb-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={selectedOnly}
+            onChange={(e) => setSelectedOnly(e.target.checked)}
+            className="accent-grimoire-accent"
+          />
+          Selected only ({selected.size})
+        </label>
+      </div>
+      <p className="text-xs text-grimoire-muted">
+        Showing {filtered.length} of {allTechniques.length} MITRE ATT&CK techniques
+      </p>
+      {filtered.length === 0 ? (
+        <p className="text-sm text-grimoire-muted">No techniques match your filters.</p>
+      ) : (
+        Object.entries(byTactic).map(([tactic, techniques]) => (
+          <div key={tactic}>
+            <h3 className="text-sm text-grimoire-muted mb-2">
+              {tactic} ({techniques.length})
+            </h3>
+            <div className="space-y-1 max-h-80 overflow-y-auto">
+              {techniques.map((t) => (
+                <label
+                  key={t.id}
+                  className={`flex items-center gap-3 p-2 rounded cursor-pointer border ${
+                    selected.has(t.id)
+                      ? "border-grimoire-accent bg-grimoire-bg"
+                      : "border-transparent hover:border-grimoire-border"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selected.has(t.id)}
+                    onChange={() => onToggle(t.id)}
+                    className="accent-grimoire-accent"
+                  />
+                  <span className="text-grimoire-accent text-xs w-20 shrink-0">{t.id}</span>
+                  <span className="text-sm">{t.name}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        ))
+      )}
+    </div>
+  );
 }
 
 export default function CampaignForm({
@@ -431,46 +559,13 @@ export default function CampaignForm({
   }
 
   if (section === "techniques") {
-    const selected = new Set(data.selected_techniques);
-    const byTactic = allTechniques.reduce(
-      (acc, t) => {
-        if (!acc[t.tactic]) acc[t.tactic] = [];
-        acc[t.tactic].push(t);
-        return acc;
-      },
-      {} as Record<string, typeof allTechniques>
-    );
-
     return (
-      <div className="space-y-4">
-        {meta && <SectionHeader refId={meta.ref} title={meta.title} subtitle={meta.subtitle} />}
-        {Object.entries(byTactic).map(([tactic, techniques]) => (
-          <div key={tactic}>
-            <h3 className="text-sm text-grimoire-muted mb-2">{tactic}</h3>
-            <div className="space-y-1">
-              {techniques.map((t) => (
-                <label
-                  key={t.id}
-                  className={`flex items-center gap-3 p-2 rounded cursor-pointer border ${
-                    selected.has(t.id)
-                      ? "border-grimoire-accent bg-grimoire-bg"
-                      : "border-transparent hover:border-grimoire-border"
-                  }`}
-                >
-                  <input
-                    type="checkbox"
-                    checked={selected.has(t.id)}
-                    onChange={() => toggleTechnique(t.id)}
-                    className="accent-grimoire-accent"
-                  />
-                  <span className="text-grimoire-accent text-xs w-16">{t.id}</span>
-                  <span className="text-sm">{t.name}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
+      <TechniqueSelection
+        meta={meta}
+        data={data}
+        allTechniques={allTechniques}
+        onToggle={toggleTechnique}
+      />
     );
   }
 
